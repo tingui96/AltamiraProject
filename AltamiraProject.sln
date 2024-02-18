@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltamiraProject", "AltamiraProject\AltamiraProject.csproj", "{5BC49E38-4932-460A-B1DE-ECF90B44C5B6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{07DC82A6-D158-4E90-87C6-BFE133BD9296} = {07DC82A6-D158-4E90-87C6-BFE133BD9296}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{1E39766D-9F88-4FC8-B6E4-3292AB762C3A}"
 EndProject
@@ -11,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{7239714C-EE50-4583-93D3-9FE23670ABB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{F229715F-4531-4E19-8862-75AE8434C282}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{F229715F-4531-4E19-8862-75AE8434C282}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{07DC82A6-D158-4E90-87C6-BFE133BD9296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +44,10 @@ Global
 		{F229715F-4531-4E19-8862-75AE8434C282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F229715F-4531-4E19-8862-75AE8434C282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F229715F-4531-4E19-8862-75AE8434C282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07DC82A6-D158-4E90-87C6-BFE133BD9296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07DC82A6-D158-4E90-87C6-BFE133BD9296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07DC82A6-D158-4E90-87C6-BFE133BD9296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07DC82A6-D158-4E90-87C6-BFE133BD9296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿using Contracts.Repository;
+﻿using Contracts.Services;
 using Entities.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,22 +8,22 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAuthRepository _authRepository;
-        public AccountController(IAuthRepository authRepository)
+        private readonly IAccountService _accountService;
+        public AccountController(IAccountService accountService)
         {
-            _authRepository = authRepository;
+            _accountService = accountService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
-            var identity = await _authRepository.Register(register);
-            return Ok(identity);
+            var result = await _accountService.RegisterAsync(register);
+            return Ok(result);
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var identity = await _authRepository.Login(login);
-            return Ok(identity);
+            var result = await _accountService.LoginAsync(login);
+            return Ok(result);
         }
     }
 }

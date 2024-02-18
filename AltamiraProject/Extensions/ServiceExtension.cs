@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Contracts.Repository;
+using Contracts.Services;
 using Entities;
 using Entities.Models;
 using LoggerService;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using Repository;
+using Services;
 using Swashbuckle.AspNetCore.Filters;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -90,6 +92,10 @@ namespace AltamiraProject.Extensions
                 });
                 option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+        }
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddTransient<IAccountService,AccountService>();
         }
     }
 
