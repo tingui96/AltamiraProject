@@ -2,6 +2,7 @@
 using Contracts.Repository;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -46,11 +47,11 @@ namespace AltamiraProject.Controllers
             var result = _mapper.Map<IEnumerable<UserResponse>>(users);
             return Ok(result);
         }
-        [HttpPost("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserToUpdateDTO user)
+        [HttpPost("update/{userId}")]
+        public async Task<IActionResult> UpdateUser(string userId,[FromBody] UserToUpdateDTO user)
         {
-            var user = _mapper.Map<User>(user);
-            var users = await _repositoryManager.Users.UpdateUser()
+            var userToUpdate = _mapper.Map<User>(user);
+            var result = await _repositoryManager.Users.UpdateUser(userId, userToUpdate);
             return Ok(result);
         }
     }

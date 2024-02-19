@@ -19,8 +19,9 @@ namespace Repository
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> UpdateUser(User entity)
+        public async Task<IdentityResult> UpdateUser(string id,User entity)
         {
+            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception("User not found");
             var result = await _userManager.UpdateAsync(entity);
             return await Task.FromResult(result);
         }

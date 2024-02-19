@@ -34,7 +34,7 @@ namespace Services
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, issuer),
             };
 
-            var roles = await _userRepository.GetAllRoles(user);
+            var roles = await _userRepository.GetAllRoles(user.Id);
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role,role));

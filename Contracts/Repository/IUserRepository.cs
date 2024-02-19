@@ -16,7 +16,7 @@ namespace Contracts.Repository
         Task<IdentityResult> RemoveRole(string id, string rolname);
         Task<IList<string>> GetAllRoles(string id);
         Task<IEnumerable<User>> GetUsersInRole(string rol);
-        Task<IdentityResult> UpdateUser(User entity);
+        Task<IdentityResult> UpdateUser(string id, User entity);
         Task<IdentityResult> DeleteUser(string id);
     }
 }

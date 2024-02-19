@@ -9,13 +9,11 @@ namespace Entities.DTO.Request
 {
     public class UserToUpdateDTO
     {
-        [Required]
         public string Id { get; set; }
         public string Name { get; set; }
         public string UserName { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        [Phone]
         public string PhoneNumber { get; set; }
         public bool Activo { get; set; }
     }
