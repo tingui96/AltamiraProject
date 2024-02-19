@@ -1,79 +1,41 @@
 ﻿using Contracts.Repository;
 using Entities;
 using Entities.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : RepositoryBase<User>, IUserRepository
     {
-        private readonly UserManager<User> _userManager;
-        public UserRepository(UserManager<User> userManager)
+        public UserRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+
+        public void CreateUser(User entity)
         {
-            _userManager = userManager;
+            Create(entity);
         }
 
-        public async Task<IdentityResult> UpdateUser(string id,User entity)
+        public void UpdateUser(User entity)
         {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception("User not found");
-            var result = await _userManager.UpdateAsync(entity);
-            return await Task.FromResult(result);
+            Update(entity);
         }
-        public async Task<IdentityResult> DeleteUser(string id)
+        public void DeleteUser(User entity)
         {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.DeleteAsync(user);
-            return await Task.FromResult(result);
+            Delete(entity);
         }
         /**/
-        public async Task<IEnumerable<User>> GetAllUserAsync()
+        public async Task<IEnumerable<User>> GetAllUserAsync(bool trackChanges)
         {
-            var users = await _userManager.Users
-                .OrderBy(x => x.UserName)
-                .ToListAsync();
-            return await Task.FromResult(users);
+            return await FindAll(trackChanges)
+            .OrderBy(O => O.Name)
+            .ToListAsync();
         }
         /**/
-        public async Task<User> GetUserByIdAsync(string userId)
+        public async Task<User> GetUserByIdAsync(Guid userId, bool trackChanges)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId)) ?? throw new Exception("User not found");
+            var user = await FindByCondition(user =>
+               user.Id.Equals(userId), trackChanges)
+               .FirstOrDefaultAsync() ?? throw new Exception("User not found");
             return await Task.FromResult(user);
         }
-
-        public async Task<IdentityResult> AddRole(string id, string rol)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.AddToRoleAsync(user, rol);
-
-            return await Task.FromResult(result);
-        }
-
-        public async Task<IdentityResult> RemoveRole(string id, string rolname)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.RemoveFromRoleAsync(user, rolname);
-
-            return await Task.FromResult(result);
-        }
-        /**/
-        public async Task<IEnumerable<User>> GetUsersInRole(string rol)
-        {
-            var users = await _userManager.GetUsersInRoleAsync(rol);
-            return await Task.FromResult(users);
-        }
-        /**/
-        public async Task<IList<string>> GetAllRoles(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception("User not found");
-            var roles = await _userManager.GetRolesAsync(user);
-            return await Task.FromResult(roles);
-        }
-
     }
 }

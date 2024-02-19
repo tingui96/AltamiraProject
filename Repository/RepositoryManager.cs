@@ -16,13 +16,9 @@ namespace Repository
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
         private RepositoryContext _repositoryContext;
-        private UserManager<User> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
-        public RepositoryManager(RepositoryContext repositoryContext, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public RepositoryManager(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
-            _userManager = userManager;
-            _roleManager = roleManager;
         }
         public IObraRepository Obras 
         {
@@ -38,7 +34,7 @@ namespace Repository
             get
             {
                 if (_roleRepository == null)
-                    _roleRepository = new RoleRepository(_roleManager);
+                    _roleRepository = new RoleRepository(_repositoryContext);
                 return _roleRepository;
             }
         }
@@ -47,7 +43,7 @@ namespace Repository
             get
             {
                 if (_userRepository == null)
-                    _userRepository = new UserRepository(_userManager);
+                    _userRepository = new UserRepository(_repositoryContext);
                 return _userRepository;
             }
         }

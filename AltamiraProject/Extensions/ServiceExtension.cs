@@ -78,7 +78,11 @@ namespace AltamiraProject.Extensions
         {
             var connectionString = config["ConnectionStrings:sqlConnection"];
 
-            services.AddDbContext<RepositoryContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<RepositoryContext>(o => 
+            {
+                o.UseSqlServer(connectionString);
+                o.EnableSensitiveDataLogging();
+            });
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {

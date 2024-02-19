@@ -10,13 +10,10 @@ namespace Contracts.Repository
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllUserAsync();
-        Task<User> GetUserByIdAsync(string userId);
-        Task<IdentityResult> AddRole(string id, string rolname);
-        Task<IdentityResult> RemoveRole(string id, string rolname);
-        Task<IList<string>> GetAllRoles(string id);
-        Task<IEnumerable<User>> GetUsersInRole(string rol);
-        Task<IdentityResult> UpdateUser(string id, User entity);
-        Task<IdentityResult> DeleteUser(string id);
+        Task<IEnumerable<User>> GetAllUserAsync(bool trackChanges);
+        Task<User> GetUserByIdAsync(Guid userId, bool trackChanges);
+        void UpdateUser(User entity);
+        void DeleteUser(User entity);
+        void CreateUser(User entity);
     }
 }

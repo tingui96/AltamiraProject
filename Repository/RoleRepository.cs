@@ -1,50 +1,42 @@
 ﻿using Contracts.Repository;
-using Microsoft.AspNetCore.Identity;
+using Entities;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : RepositoryBase<Role>, IRoleRepository
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public RoleRepository(RoleManager<IdentityRole> roleManager)
+        public RoleRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+
+        public void CreateRole(Role entity)
         {
-            _roleManager = roleManager;
+            Create(entity);
         }
 
-        public async Task<IdentityResult> AddRole(IdentityRole role)
+        public void DeleteRole(Role entity)
         {
-            var result = await _roleManager.CreateAsync(role);
-            return await Task.FromResult(result);
+            Delete(entity);
         }
 
-        public async Task<IdentityResult> DeleteRole(IdentityRole role)
+        public async Task<IEnumerable<Role>> GetAllRoleAsync(bool trackChanges)
         {
-            var result = await _roleManager.DeleteAsync(role);
-            return await Task.FromResult(result);
+            return await FindAll(trackChanges)
+            .OrderBy(O => O.Name)
+            .ToListAsync();
         }
 
-        public async Task<IEnumerable<IdentityRole>> GetAllRole()
+        public async Task<Role> GetRoleByIdAsync(Guid roleId, bool trackChanges)
         {
-            var result = await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync();
-            return await Task.FromResult(result);
+            var role = await FindByCondition(role =>
+                role.Id.Equals(roleId), trackChanges)
+                .FirstOrDefaultAsync() ?? throw new Exception("Role not found");
+            return await Task.FromResult(role);
         }
 
-        public async Task<IdentityRole> GetRoleById(string roleId)
+        public void UpdateRole(Role entity)
         {
-            var result = await _roleManager.FindByIdAsync(roleId) ?? throw new Exception("Role not exist");
-            return await Task.FromResult(result);
-        }
-
-        public async Task<IdentityResult> UpdateRole(IdentityRole role)
-        {
-            var result = await _roleManager.UpdateAsync(role);
-            return await Task.FromResult(result);
+            Update(entity);
         }
     }
 }
