@@ -18,7 +18,7 @@ namespace AltamiraProject.Controllers
             _repository = repositoryManager;
             _logger = logger;
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetObras() 
         {

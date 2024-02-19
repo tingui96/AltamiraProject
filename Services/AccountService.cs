@@ -1,5 +1,4 @@
-﻿using Azure.Core.Pipeline;
-using Contracts.Repository;
+﻿using Contracts.Repository;
 using Contracts.Services;
 using Entities.DTO;
 using Entities.DTO.Response;
@@ -16,11 +15,14 @@ namespace Services
     public class AccountService : IAccountService
     {
         private readonly IConfiguration _configuration;
-        private readonly IAuthRepository _authRepository;
-        public AccountService(IConfiguration configuration, IAuthRepository authRepository)
+        private readonly IAuthService _authRepository;
+        private readonly IUserRepository _userRepository;
+        public AccountService(IConfiguration configuration, IAuthService authRepository,IUserRepository userRepository)
         {
             _configuration = configuration;
             _authRepository = authRepository;
+            _userRepository = userRepository;
+
         }
         private async Task<List<Claim>> GetClaims(User user)
         {
@@ -32,7 +34,7 @@ namespace Services
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, issuer),
             };
 
-            var roles = await _authRepository.GetAllRoles(user);
+            var roles = await _userRepository.GetAllRoles(user);
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role,role));

@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,13 @@ namespace Contracts.Repository
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllUserAsync(bool trackChanges);
-        Task<User> GetUserByIdAsync(Guid UserId, bool trackChanges);
-        void CreateUser(User entity);
-        void UpdateUser(User entity);
-        void DeleteUser(User entity);
+        Task<IEnumerable<User>> GetAllUserAsync();
+        Task<User> GetUserByIdAsync(string userId);
+        Task<IdentityResult> AddRole(string id, string rolname);
+        Task<IdentityResult> RemoveRole(string id, string rolname);
+        Task<IList<string>> GetAllRoles(User user);
+        Task<IEnumerable<User>> GetUsersInRole(string rol);
+        Task<IdentityResult> UpdateUser(User entity);
+        Task<IdentityResult> DeleteUser(string id);
     }
 }

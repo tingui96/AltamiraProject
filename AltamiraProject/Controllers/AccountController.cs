@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AltamiraProject.Controllers
 {
-    [Route("api/account")]
+    [Route("api")]
     [ApiController]
     public class AccountController : ControllerBase
     {

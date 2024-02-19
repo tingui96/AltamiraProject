@@ -1,5 +1,7 @@
 ﻿using Contracts.Repository;
 using Entities;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,16 @@ namespace Repository
     public class RepositoryManager : IRepositoryManager
     {
         private IObraRepository _obraRepository;
+        private IRoleRepository _roleRepository;
+        private IUserRepository _userRepository;
         private RepositoryContext _repositoryContext;
-
-        public RepositoryManager(RepositoryContext repositoryContext)
+        private UserManager<User> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
+        public RepositoryManager(RepositoryContext repositoryContext, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _repositoryContext = repositoryContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         public IObraRepository Obras 
         {
@@ -26,10 +33,28 @@ namespace Repository
                 return _obraRepository;
             }
         }
+        public IRoleRepository Roles
+        { 
+            get
+            {
+                if (_roleRepository == null)
+                    _roleRepository = new RoleRepository(_roleManager);
+                return _roleRepository;
+            }
+        }
+        public IUserRepository Users
+        {
+            get
+            {
+                if (_userRepository == null)
+                    _userRepository = new UserRepository(_userManager);
+                return _userRepository;
+            }
+        }
+       
         public async Task SaveAsync()
         {
-            await _repositoryContext.SaveChangesAsync();
-            
+            await _repositoryContext.SaveChangesAsync(); 
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Contracts.Repository;
+﻿using Contracts.Services;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Services
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthRepository(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -24,26 +24,7 @@ namespace Repository
         {
             var rol = await _roleManager.CreateAsync(role);
             return await Task.FromResult(rol);
-        }
-
-        public async Task<IdentityResult> AddRole(string id, string rol)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.AddToRoleAsync(user, rol);
-
-            return await Task.FromResult(result);
-        }
-
-        public async Task<IList<string>> GetAllRoles(User user)
-        {
-            return await _userManager.GetRolesAsync(user);
-        }
-
-        public async Task<IEnumerable<User>> GetUsersInRole(string rol)
-        {
-            var users = await _userManager.GetUsersInRoleAsync(rol);
-            return await Task.FromResult(users);
-        }
+        }  
 
         public async Task<User> Login(LoginModel model)
         {
@@ -68,24 +49,10 @@ namespace Repository
             return await Task.FromResult(result);
         }
 
-        public async Task<IdentityResult> RemoveRole(string id, string rolname)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.RemoveFromRoleAsync(user, rolname);
-
-            return await Task.FromResult(result);
-        }
-
         private async Task<User> UserExists(string Username)
         {
             var user = await _userManager.FindByNameAsync(Username) ?? throw new Exception("User not exist");
             return await Task.FromResult(user);
-        }
-        public async Task<IdentityResult> DeleteUser(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception();
-            var result = await _userManager.DeleteAsync(user);
-            return await Task.FromResult(result);
         }
     }
 }

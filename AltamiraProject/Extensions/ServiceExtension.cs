@@ -67,7 +67,8 @@ namespace AltamiraProject.Extensions
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<RepositoryContext>()
                 .AddDefaultTokenProviders();
@@ -93,9 +94,9 @@ namespace AltamiraProject.Extensions
                 option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
         }
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration config)
+        public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddTransient<IAccountService,AccountService>();
+            services.AddScoped<IAccountService,AccountService>();
         }
     }
 
