@@ -45,5 +45,14 @@ namespace Repository
               .FirstOrDefaultAsync() ?? throw new Exception("User not found");
             return await Task.FromResult(user);
         }
+
+        public async Task<User> GetUserWithDetailAsync(Guid userId, bool trackChanges)
+        {
+            var user = await FindByCondition(x => x.Id.Equals(userId), trackChanges)
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync()
+                ?? throw new Exception("User not found");
+            return await Task.FromResult(user);
+        }
     }
 }

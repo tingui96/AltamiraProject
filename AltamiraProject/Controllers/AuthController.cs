@@ -6,23 +6,23 @@ namespace AltamiraProject.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AuthController : ControllerBase
     {
-        private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            _accountService = accountService;
+            _authService = authService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
-            var result = await _accountService.RegisterAsync(register);
+            var result = await _authService.RegisterAsync(register);
             return Ok(result);
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var result = await _accountService.LoginAsync(login);
+            var result = await _authService.LoginAsync(login);
             return Ok(result);
         }
     }

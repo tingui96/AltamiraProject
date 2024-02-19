@@ -1,4 +1,5 @@
 ﻿using Entities.DTO;
+using Entities.DTO.Response;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,8 +12,8 @@ namespace Contracts.Services
 {
     public interface IAuthService
     {
-        Task<User> Register(RegisterModel model);
-        Task<User> Login(LoginModel model);
+        Task<User> RegisterAsync(RegisterModel model);
+        Task<AuthResponse> LoginAsync(LoginModel model);
         //Task<IdentityResult> ChangePassword(ChangePasswordModel model);
         //Task<IdentityResult> SetPassword(SetPasswordModel model);
         //Task<IdentityResult> ResetPassword(ResetPasswordModel model);
