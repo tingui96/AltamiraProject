@@ -9,6 +9,8 @@ namespace Contracts.Repository
     public interface IRepositoryManager
     {
         IObraRepository Obras { get; }
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
         Task SaveAsync();
 
     }

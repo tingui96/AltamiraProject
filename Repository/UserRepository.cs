@@ -30,7 +30,7 @@ namespace Repository
             var result = await _userManager.DeleteAsync(user);
             return await Task.FromResult(result);
         }
-
+        /**/
         public async Task<IEnumerable<User>> GetAllUserAsync()
         {
             var users = await _userManager.Users
@@ -38,7 +38,7 @@ namespace Repository
                 .ToListAsync();
             return await Task.FromResult(users);
         }
-
+        /**/
         public async Task<User> GetUserByIdAsync(string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId)) ?? throw new Exception("User not found");
@@ -60,16 +60,18 @@ namespace Repository
 
             return await Task.FromResult(result);
         }
-
+        /**/
         public async Task<IEnumerable<User>> GetUsersInRole(string rol)
         {
             var users = await _userManager.GetUsersInRoleAsync(rol);
             return await Task.FromResult(users);
         }
-
-        public async Task<IList<string>> GetAllRoles(User user)
+        /**/
+        public async Task<IList<string>> GetAllRoles(string id)
         {
-            return await _userManager.GetRolesAsync(user);
+            var user = await _userManager.FindByIdAsync(id) ?? throw new Exception("User not found");
+            var roles = await _userManager.GetRolesAsync(user);
+            return await Task.FromResult(roles);
         }
 
     }
