@@ -13,15 +13,17 @@ namespace Entities.DTO
         [Display(Name = "Nombre")]
         [StringLength(50)]
         public required string Name { get; set; }
+
         [Required]
         [Display(Name = "UserName")]
         public required string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         public required string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public required string Password { get; set; }

@@ -1,5 +1,5 @@
 ﻿using Contracts;
-using Contracts.Repository;
+using Contracts.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +11,9 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class ObrasController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
+        private readonly IRepositoryService _repository;
         private readonly ILoggerManager _logger;
-        public ObrasController(IRepositoryManager repositoryManager, ILoggerManager logger)
+        public ObrasController(IRepositoryService repositoryManager, ILoggerManager logger)
         {
             _repository = repositoryManager;
             _logger = logger;

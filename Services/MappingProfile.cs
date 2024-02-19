@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using Entities.DTO;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Models;
 
-namespace AltamiraProject
+namespace Services
 {
     public class MappingProfile : Profile
     {
@@ -11,6 +12,7 @@ namespace AltamiraProject
         {
             CreateMap<User, UserResponse>();
             CreateMap<UserToUpdateDTO, User>();
+            CreateMap<RegisterModel, User>();
         }
     }
 }

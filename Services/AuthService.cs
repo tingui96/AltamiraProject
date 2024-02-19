@@ -1,58 +1,51 @@
-﻿using Contracts.Services;
+﻿using AutoMapper;
+using Contracts.Repository;
+using Contracts.Services;
+using CryptoHelper;
 using Entities.DTO;
 using Entities.Models;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-        public async Task<IdentityResult> AddRole(IdentityRole role)
-        {
-            var rol = await _roleManager.CreateAsync(role);
-            return await Task.FromResult(rol);
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }  
 
         public async Task<User> Login(LoginModel model)
         {
             var userToVerify = await UserExists(model.Usuario);
-            var check = await _userManager.CheckPasswordAsync(userToVerify, model.Password);
+            var check = CheckPassword(userToVerify, model.Password);
             if (check) return await Task.FromResult(userToVerify);
-            throw new Exception();
+            throw new Exception("Wrong Password");
         }
 
-        public async Task<IdentityResult> Register(RegisterModel model)
+        public async Task<User> Register(RegisterModel model)
         {
-            var user = new User() { Name = model.Name, UserName = model.UserName, Email = model.Email, Activo = true };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if(!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    throw new Exception(error.Description);
-                }
-            }
-            return await Task.FromResult(result);
+            var user = _mapper.Map<User>(model);
+            user.Password = HashPassword(model.Password);
+            _repositoryManager.Users.CreateUser(user); 
+            return await Task.FromResult(user);
         }
 
         private async Task<User> UserExists(string Username)
         {
-            var user = await _userManager.FindByNameAsync(Username) ?? throw new Exception("User not exist");
+            var user = await _repositoryManager.Users.GetUserByNameAsync(Username) ?? throw new Exception("User not exist");
             return await Task.FromResult(user);
         }
-    }
+        private bool CheckPassword(User user, string Password)
+        {
+            return Crypto.VerifyHashedPassword(user.Password, Password);
+        }
+        private string HashPassword(string password)
+        {
+            return Crypto.HashPassword(password);
+        }
+    }       
 }

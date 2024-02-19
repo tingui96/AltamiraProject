@@ -63,7 +63,7 @@ namespace AltamiraProject.Extensions
         }
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
-            services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<IRepositoryService, RepositoryService>();
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {

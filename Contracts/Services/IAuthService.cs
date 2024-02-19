@@ -11,7 +11,7 @@ namespace Contracts.Services
 {
     public interface IAuthService
     {
-        Task<IdentityResult> Register(RegisterModel model);
+        Task<User> Register(RegisterModel model);
         Task<User> Login(LoginModel model);
         //Task<IdentityResult> ChangePassword(ChangePasswordModel model);
         //Task<IdentityResult> SetPassword(SetPasswordModel model);

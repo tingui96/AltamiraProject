@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Contracts.Repository;
+using Contracts.Services;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Models;
@@ -13,9 +13,9 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IRepositoryManager _repositoryManager;
+        private readonly IRepositoryService _repositoryManager;
         private readonly IMapper _mapper;
-        public UserController(IRepositoryManager repositoryManager, IMapper mapper)
+        public UserController(IRepositoryService repositoryManager, IMapper mapper)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;

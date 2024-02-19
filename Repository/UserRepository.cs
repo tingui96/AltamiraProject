@@ -22,19 +22,27 @@ namespace Repository
         {
             Delete(entity);
         }
-        /**/
+        
         public async Task<IEnumerable<User>> GetAllUserAsync(bool trackChanges)
         {
             return await FindAll(trackChanges)
             .OrderBy(O => O.Name)
             .ToListAsync();
         }
-        /**/
+        
         public async Task<User> GetUserByIdAsync(Guid userId, bool trackChanges)
         {
             var user = await FindByCondition(user =>
                user.Id.Equals(userId), trackChanges)
                .FirstOrDefaultAsync() ?? throw new Exception("User not found");
+            return await Task.FromResult(user);
+        }
+
+        public async Task<User> GetUserByNameAsync(string name, bool trackChanges)
+        {
+            var user = await FindByCondition(user =>
+              user.Name.Equals(name), trackChanges)
+              .FirstOrDefaultAsync() ?? throw new Exception("User not found");
             return await Task.FromResult(user);
         }
     }

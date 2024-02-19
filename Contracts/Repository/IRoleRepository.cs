@@ -1,10 +1,4 @@
 ﻿using Entities.Models;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contracts.Repository
 {
@@ -13,7 +7,7 @@ namespace Contracts.Repository
         void CreateRole(Role entity);
         void UpdateRole(Role entity);
         void DeleteRole(Role entity);
-        Task<IEnumerable<Role>> GetAllRoleAsync(bool trackChanges);
-        Task<Role> GetRoleByIdAsync(Guid roleId, bool trackChanges);
+        Task<IEnumerable<Role>> GetAllRoleAsync(bool trackChanges = false);
+        Task<Role> GetRoleByIdAsync(Guid roleId, bool trackChanges = false);
     }
 }

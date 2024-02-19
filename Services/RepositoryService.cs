@@ -1,15 +1,17 @@
 ﻿using Contracts.Repository;
+using Contracts.Services;
 using Entities;
+using Repository;
 
-namespace Repository
+namespace Services
 {
-    public class RepositoryManager : IRepositoryManager
+    public class RepositoryService : IRepositoryService
     {
-        private IObraRepository _obraRepository;
-        private IRoleRepository _roleRepository;
-        private IUserRepository _userRepository;
+        private IObraRepository _obraRepository {get;set;}
+        private IRoleRepository _roleRepository { get;set;}
+        private IUserRepository _userRepository { get;set;}
         private RepositoryContext _repositoryContext;
-        public RepositoryManager(RepositoryContext repositoryContext)
+        public RepositoryService(RepositoryContext repositoryContext)
         {
             _repositoryContext = repositoryContext;
         }
