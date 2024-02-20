@@ -7,7 +7,7 @@ namespace Contracts.Repository
         Task<IEnumerable<User>> GetAllUserAsync(bool trackChanges = false);
         Task<User> GetUserWithDetailAsync(Guid userId, bool trackChanges = false);
         Task<User> GetUserByIdAsync(Guid userId, bool trackChanges = false);
-        Task<User> GetUserByNameAsync(string name, bool trackChanges = false);
+        Task<User> GetUserByUserNameAsync(string name, bool trackChanges = false);
         void UpdateUser(User entity);
         void DeleteUser(User entity);
         void CreateUser(User entity);

@@ -38,10 +38,10 @@ namespace Repository
             return await Task.FromResult(user);
         }
 
-        public async Task<User> GetUserByNameAsync(string name, bool trackChanges)
+        public async Task<User> GetUserByUserNameAsync(string name, bool trackChanges)
         {
             var user = await FindByCondition(user =>
-              user.Name.Equals(name), trackChanges)
+              user.UserName.Equals(name), trackChanges)
               .FirstOrDefaultAsync() ?? throw new Exception("User not found");
             return await Task.FromResult(user);
         }

@@ -11,6 +11,8 @@ namespace Contracts.Services
     {
         IUserServices UserService { get; }
         IAuthService AuthService { get; }
+        IRoleService RoleService { get; }
+        IObraService ObraService { get; }
 
     }
 }

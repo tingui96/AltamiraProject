@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Contracts.Services;
+﻿using Contracts.Services;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Models;
@@ -13,42 +12,45 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IServiceManager _repositoryService;
-        public UserController(IServiceManager repositoryService, IMapper mapper)
+        private readonly IServiceManager _serviceManager;
+        public UserController(IServiceManager repositoryService)
         {
-            _repositoryService = repositoryService;
-            _mapper = mapper;
+            _serviceManager = repositoryService;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllUser()
         {
-            var users = await _repositoryService.Users.GetAllUserAsync();
-            var result = _mapper.Map<IEnumerable<UserResponse>>(users);
-            return Ok(result);
+            var users = await _serviceManager.UserService.GetAllUserAsync();            
+            return Ok(users);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            var user = await _repositoryService.Users.GetUserByIdAsync(id);
-            var result = _mapper.Map<UserResponse>(user);
-            return Ok(result);
+            var user = await _serviceManager.UserService.GetUserByIdAsync(id);
+            return Ok(user);
         }
         [HttpGet("{id}/roles")]
         public async Task<IActionResult> GetAllRoles(Guid id)
         {
-            var result = await _repositoryService.Users.GetUserWithDetailAsync(id);
+            var result = await _serviceManager.UserService.GetUserWithDetailAsync(id);
             return Ok(result);
         }
         [HttpGet("role/{roleId}")]
         public async Task<IActionResult> GetUserInRole(Guid roleId)
         {
-            var users = await _repositoryService.Roles.GetRoleWithDetailAsync(roleId);
-            var result = _mapper.Map<IEnumerable<UserResponse>>(users);
-            return Ok(result);
+            var users = await _serviceManager.RoleService.GetUserInRole(roleId);
+            return Ok(users);
         }
-        [HttpPost("update/{userId}")]
-        public async Task<IActionResult> UpdateUser(string userId,[FromBody] UserToUpdateDTO user)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id,[FromBody] UserToUpdateDTO user)
         {
+            await _serviceManager.UserService.UpdateUserAsync(id, user);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            await _serviceManager.UserService.DeleteUserAsync(id);
             return Ok();
         }
     }

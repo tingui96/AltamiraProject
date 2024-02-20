@@ -2,6 +2,7 @@
 using Entities;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Repository
 {
@@ -30,7 +31,17 @@ namespace Repository
         {
             var role = await FindByCondition(role =>
                 role.Id.Equals(roleId), trackChanges)
-                .FirstOrDefaultAsync() ?? throw new Exception("Role not found");
+                .FirstOrDefaultAsync()
+                ?? throw new Exception("Role not found");
+            return await Task.FromResult(role);
+        }
+
+        public async Task<IEnumerable<Role>> GetRoleByNameAsync(string roleName,bool trackChanges = false)
+        {
+            var role = await FindByCondition(role =>
+                role.Name.ToLower().Equals(roleName.ToLower()), trackChanges)
+                .ToListAsync();
+                
             return await Task.FromResult(role);
         }
 
