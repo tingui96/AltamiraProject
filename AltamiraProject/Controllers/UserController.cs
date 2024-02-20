@@ -13,46 +13,43 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IRepositoryService _repositoryManager;
-        private readonly IMapper _mapper;
-        public UserController(IRepositoryService repositoryManager, IMapper mapper)
+        private readonly IServiceManager _repositoryService;
+        public UserController(IServiceManager repositoryService, IMapper mapper)
         {
-            _repositoryManager = repositoryManager;
+            _repositoryService = repositoryService;
             _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllUser()
         {
-            var users = await _repositoryManager.Users.GetAllUserAsync();
+            var users = await _repositoryService.Users.GetAllUserAsync();
             var result = _mapper.Map<IEnumerable<UserResponse>>(users);
             return Ok(result);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(string id)
+        public async Task<IActionResult> GetUserById(Guid id)
         {
-            var user = await _repositoryManager.Users.GetUserByIdAsync(id);
+            var user = await _repositoryService.Users.GetUserByIdAsync(id);
             var result = _mapper.Map<UserResponse>(user);
             return Ok(result);
         }
         [HttpGet("{id}/roles")]
-        public async Task<IActionResult> GetAllRoles(string id)
+        public async Task<IActionResult> GetAllRoles(Guid id)
         {
-            var result = await _repositoryManager.Users.GetAllRoles(id);
+            var result = await _repositoryService.Users.GetUserWithDetailAsync(id);
             return Ok(result);
         }
-        [HttpGet("role/{roleName}")]
-        public async Task<IActionResult> GetUserInRole(string roleName)
+        [HttpGet("role/{roleId}")]
+        public async Task<IActionResult> GetUserInRole(Guid roleId)
         {
-            var users = await _repositoryManager.Users.GetUsersInRole(roleName);
+            var users = await _repositoryService.Roles.GetRoleWithDetailAsync(roleId);
             var result = _mapper.Map<IEnumerable<UserResponse>>(users);
             return Ok(result);
         }
         [HttpPost("update/{userId}")]
         public async Task<IActionResult> UpdateUser(string userId,[FromBody] UserToUpdateDTO user)
         {
-            var userToUpdate = _mapper.Map<User>(user);
-            var result = await _repositoryManager.Users.UpdateUser(userId, userToUpdate);
-            return Ok(result);
+            return Ok();
         }
     }
 }

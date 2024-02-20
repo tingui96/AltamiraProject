@@ -13,6 +13,8 @@ namespace Services
             CreateMap<User, UserResponse>();
             CreateMap<UserToUpdateDTO, User>();
             CreateMap<RegisterModel, User>();
+            CreateMap<Role, RoleResponse>();
+            CreateMap<User, UserWithDetail>();
         }
     }
 }

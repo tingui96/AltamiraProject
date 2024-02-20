@@ -7,12 +7,10 @@ using Contracts.Repository;
 
 namespace Contracts.Services
 {
-    public interface IRepositoryService
+    public interface IServiceManager
     {
-        IObraRepository Obras { get; }
-        IUserRepository Users { get; }
-        IRoleRepository Roles { get; }
-        Task SaveAsync();
+        IUserServices UserService { get; }
+        IAuthService AuthService { get; }
 
     }
 }

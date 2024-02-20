@@ -5,13 +5,17 @@ namespace Repository
 {
     public class RepositoryManager : IRepositoryManager
     {
-        private IObraRepository _obraRepository;
-        private IRoleRepository _roleRepository;
-        private IUserRepository _userRepository;
-        private RepositoryContext _repositoryContext;
+        private Lazy<IObraRepository> _obraRepository;
+        private Lazy<IRoleRepository> _roleRepository;
+        private Lazy<IUserRepository> _userRepository;
+        private Lazy<IUnitOfWork> _unitOfWork;
+        
         public RepositoryManager(RepositoryContext repositoryContext)
         {
-            _repositoryContext = repositoryContext;
+            _obraRepository = new Lazy<IObraRepository>(() => new ObraRepository(repositoryContext));
+            _userRepository = new Lazy<IUserRepository>(() => new UserRepository(repositoryContext));
+            _roleRepository = new Lazy<IRoleRepository>(() => new RoleRepository(repositoryContext));
+            _unitOfWork = new Lazy<IUnitOfWork>(() => new )
         }
         public IObraRepository Obras 
         {
@@ -40,7 +44,9 @@ namespace Repository
                 return _userRepository;
             }
         }
-       
+
+        public IUnitOfWork UnitOfWork => _repositoryContext.SaveChangesAsync();
+
         public async Task SaveAsync()
         {
             await _repositoryContext.SaveChangesAsync(); 

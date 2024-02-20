@@ -11,9 +11,9 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class ObrasController : ControllerBase
     {
-        private readonly IRepositoryService _repository;
+        private readonly IServiceManager _repository;
         private readonly ILoggerManager _logger;
-        public ObrasController(IRepositoryService repositoryManager, ILoggerManager logger)
+        public ObrasController(IServiceManager repositoryManager, ILoggerManager logger)
         {
             _repository = repositoryManager;
             _logger = logger;

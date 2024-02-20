@@ -11,10 +11,11 @@ builder.Services.ConfigureCors();
 //Configurar LoggerService
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
-builder.Services.ConfigureDatabase(builder.Configuration);
-builder.Services.ConfigureIdentity();
-builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.ConfigureServices();
+builder.Services.ConfigureDatabase(builder.Configuration);
+//builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJwt(builder.Configuration);
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers();

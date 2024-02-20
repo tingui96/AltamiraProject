@@ -40,12 +40,13 @@ namespace Services
             throw new Exception("Wrong password");
         }
 
-        public async Task<User> RegisterAsync(RegisterModel model)
+        public async Task<UserResponse> RegisterAsync(RegisterModel model)
         {
             var user = _mapper.Map<User>(model);
             user.Password = HashPassword(model.Password);
             _repositoryManager.Users.CreateUser(user); 
-            return await Task.FromResult(user);
+            var result = _mapper.Map<UserResponse>(user);
+            return await Task.FromResult(result);
         }
 
         private async Task<User> UserExists(string Username)

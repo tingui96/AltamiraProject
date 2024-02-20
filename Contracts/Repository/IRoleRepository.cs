@@ -8,6 +8,7 @@ namespace Contracts.Repository
         void UpdateRole(Role entity);
         void DeleteRole(Role entity);
         Task<IEnumerable<Role>> GetAllRoleAsync(bool trackChanges = false);
+        Task<Role> GetRoleWithDetailAsync(Guid roleId, bool trackChanges = false);
         Task<Role> GetRoleByIdAsync(Guid roleId, bool trackChanges = false);
     }
 }

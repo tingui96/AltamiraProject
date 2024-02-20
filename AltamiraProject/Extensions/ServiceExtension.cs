@@ -63,15 +63,10 @@ namespace AltamiraProject.Extensions
         }
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
-            services.AddScoped<IRepositoryService, RepositoryService>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<RepositoryContext>()
-                .AddDefaultTokenProviders();
 
         }
         public static void ConfigureDatabase(this IServiceCollection services, IConfiguration config)
@@ -100,6 +95,7 @@ namespace AltamiraProject.Extensions
         }
         public static void ConfigureServices(this IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService,AccountService>();
         }
     }

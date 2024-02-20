@@ -11,7 +11,7 @@ namespace Contracts.Repository
         IObraRepository Obras { get; }
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
-        Task SaveAsync();
+        IUnitOfWork UnitOfWork { get; }
 
     }
 }
