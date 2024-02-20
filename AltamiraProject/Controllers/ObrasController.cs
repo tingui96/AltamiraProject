@@ -11,18 +11,18 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class ObrasController : ControllerBase
     {
-        private readonly IServiceManager _repository;
+        private readonly IServiceManager _serviceManager;
         private readonly ILoggerManager _logger;
-        public ObrasController(IServiceManager repositoryManager, ILoggerManager logger)
+        public ObrasController(IServiceManager serviceManager, ILoggerManager logger)
         {
-            _repository = repositoryManager;
+            _serviceManager = serviceManager;
             _logger = logger;
         }
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetObras() 
+        public async Task<IActionResult> GetAllObras() 
         {
-            var obras = await _repository.Obras.GetAllObrasAsync(trackChanges: false);
+            var obras = await _serviceManager.ObraService.GetAllObrasAsync();
             return Ok(obras);
         }
     }

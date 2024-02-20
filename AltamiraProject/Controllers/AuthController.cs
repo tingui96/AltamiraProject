@@ -8,21 +8,21 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IServiceManager _serviceManager;
+        public AuthController(IServiceManager serviceManager)
         {
-            _authService = authService;
+            _serviceManager = serviceManager;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
-            var result = await _authService.RegisterAsync(register);
+            var result = await _serviceManager.AuthService.RegisterAsync(register);
             return Ok(result);
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var result = await _authService.LoginAsync(login);
+            var result = await _serviceManager.AuthService.LoginAsync(login);
             return Ok(result);
         }
     }

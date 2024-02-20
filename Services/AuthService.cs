@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Contracts.Repository;
+﻿using Contracts.Repository;
 using Contracts.Services;
 using CryptoHelper;
 using Entities.DTO;
 using Entities.DTO.Response;
 using Entities.Models;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,13 +17,11 @@ namespace Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
 
-        public AuthService(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration)
+        public AuthService(IRepositoryManager repositoryManager, IConfiguration configuration)
         {
             _repositoryManager = repositoryManager;
             _configuration = configuration;
-            _mapper = mapper;
         }  
 
         public async Task<AuthResponse> LoginAsync(LoginModel model)
@@ -42,16 +39,17 @@ namespace Services
 
         public async Task<UserResponse> RegisterAsync(RegisterModel model)
         {
-            var user = _mapper.Map<User>(model);
+            var user = model.Adapt<User>();
             user.Password = HashPassword(model.Password);
             _repositoryManager.Users.CreateUser(user); 
-            var result = _mapper.Map<UserResponse>(user);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            var result = user.Adapt<UserResponse>();
             return await Task.FromResult(result);
         }
 
         private async Task<User> UserExists(string Username)
         {
-            var user = await _repositoryManager.Users.GetUserByNameAsync(Username) ?? throw new Exception("User not exist");
+            var user = await _repositoryManager.Users.GetUserByUserNameAsync(Username) ?? throw new Exception("User not exist");
             return await Task.FromResult(user);
         }
         private bool CheckPassword(User user, string Password)
