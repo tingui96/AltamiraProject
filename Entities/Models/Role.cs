@@ -10,8 +10,6 @@ namespace Entities.Models
     public class Role : Entity
     { 
         public string Name { get; set;}
-        [ForeignKey(nameof(User))]
-        public Guid? UserId { get; set;}
-        public User? User { get; set;}
+        public IEnumerable<User> Users { get; set;} = new List<User>();
     }
 }

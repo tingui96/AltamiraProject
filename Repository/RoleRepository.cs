@@ -34,6 +34,15 @@ namespace Repository
             return await Task.FromResult(role);
         }
 
+        public async Task<Role> GetRoleWithDetailAsync(Guid roleId, bool trackChanges = false)
+        {
+            var role = await FindByCondition(x => x.Id.Equals(roleId), trackChanges)
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync()
+                ?? throw new Exception("User not found");
+            return await Task.FromResult(role);
+        }
+
         public void UpdateRole(Role entity)
         {
             Update(entity);
