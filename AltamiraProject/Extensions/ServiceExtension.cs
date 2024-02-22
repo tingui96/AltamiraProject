@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Contracts.Repository;
+using Contracts.Services;
 using Entities;
 using Entities.Models;
 using LoggerService;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using Repository;
+using Services;
 using Swashbuckle.AspNetCore.Filters;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -65,17 +67,18 @@ namespace AltamiraProject.Extensions
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<RepositoryContext>()
-                .AddDefaultTokenProviders();
-
+                .AddEntityFrameworkStores<RepositoryContext>();
         }
         public static void ConfigureDatabase(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config["ConnectionStrings:sqlConnection"];
 
-            services.AddDbContext<RepositoryContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<RepositoryContext>(o => 
+            {
+                o.UseSqlServer(connectionString);
+                o.EnableSensitiveDataLogging();
+            });
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
@@ -90,6 +93,10 @@ namespace AltamiraProject.Extensions
                 });
                 option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+        }
+        public static void ConfigureServices(this IServiceCollection services)
+        {
+            services.AddScoped<IServiceManager,ServiceManager>();
         }
     }
 

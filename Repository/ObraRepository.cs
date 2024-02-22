@@ -2,13 +2,6 @@
 using Entities;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -19,6 +12,10 @@ namespace Repository
         public void CreateObra(Obra entity)
         {
             Create(entity);
+        }
+        public void UpdateObra(Obra entity)
+        {
+            Update(entity);
         }
         public void DeleteObra(Obra entity)
         {
@@ -32,14 +29,12 @@ namespace Repository
         }
         public async Task<Obra> GetObraByIdAsync(Guid obraId,bool trackChanges)
         {
-            return await FindByCondition(obra =>
+            var obra = await FindByCondition(obra =>
                 obra.Id.Equals(obraId), trackChanges)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new Exception("Obra not found");
+            return await Task.FromResult(obra);
         }
-        public void UpdateObra(Obra entity)
-        {
-            Update(entity);
-        }
+       
       
     }
 }

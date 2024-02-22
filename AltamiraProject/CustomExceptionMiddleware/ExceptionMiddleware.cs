@@ -37,7 +37,7 @@ namespace AltamiraProject.CustomExceptionMiddleware
             var message = exception switch
             {
                 AccessViolationException => "Access violation error from the custom middleware",
-                _ => "Internal Server Error from the custom middleware."
+                _ => "Internal Server Error from the custom middleware." + exception.Message,
             };
             await context.Response.WriteAsync(new ErrorDetails()
             {

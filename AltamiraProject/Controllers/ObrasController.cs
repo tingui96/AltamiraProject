@@ -1,8 +1,8 @@
 ﻿using Contracts;
-using Contracts.Repository;
-using Microsoft.AspNetCore.Http;
+using Contracts.Services;
+using Entities.DTO.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace AltamiraProject.Controllers
 {
@@ -10,26 +10,43 @@ namespace AltamiraProject.Controllers
     [ApiController]
     public class ObrasController : ControllerBase
     {
-        private readonly IRepositoryManager _repository;
+        private readonly IServiceManager _serviceManager;
         private readonly ILoggerManager _logger;
-        public ObrasController(IRepositoryManager repositoryManager, ILoggerManager logger)
+        public ObrasController(IServiceManager serviceManager, ILoggerManager logger)
         {
-            _repository = repositoryManager;
+            _serviceManager = serviceManager;
             _logger = logger;
         }
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetObras() 
+        public async Task<IActionResult> GetAllObras() 
         {
-            try
-            {
-                var obras = _repository.Obras.GetAllObrasAsync(trackChanges: false);
-                return Ok(obras);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetObras)} action { ex } ");
-                return StatusCode(500, "Internal server error");
-            }
+            var obras = await _serviceManager.ObraService.GetAllObrasAsync();
+            return Ok(obras);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetObraById(Guid id)
+        {
+            var obra = await _serviceManager.ObraService.GetObrabyIdAsync(id);
+            return Ok(obra);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateObra(ObraModel obraModel)
+        {
+            var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
+            return Ok(obra);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateObra(Guid id, ObraToUpdateDTO obraToUpdate)
+        {
+            await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteObra(Guid id)
+        {
+            await _serviceManager.ObraService.DeleteObraAsync(id);
+            return Ok();
         }
     }
 }

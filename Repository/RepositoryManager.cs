@@ -1,35 +1,28 @@
 ﻿using Contracts.Repository;
 using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Repository
 {
     public class RepositoryManager : IRepositoryManager
     {
-        private IObraRepository _obraRepository;
-        private RepositoryContext _repositoryContext;
+        private Lazy<IObraRepository> _obraRepository;
+        private UserManager<User> _userRepository;
+        private Lazy<IUnitOfWork> _unitOfWork;
+        
+        public RepositoryManager(RepositoryContext repositoryContext,UserManager<User> userManager)
+        {
+            _obraRepository = new Lazy<IObraRepository>(() => new ObraRepository(repositoryContext));
+            _userRepository = userManager;
+            _unitOfWork = new Lazy<IUnitOfWork>(() => new UnitOfWork(repositoryContext));
+        }
+        public IObraRepository Obras => _obraRepository.Value; 
 
-        public RepositoryManager(RepositoryContext repositoryContext)
-        {
-            _repositoryContext = repositoryContext;
-        }
-        public IObraRepository Obras 
-        {
-            get
-            {
-                if (_obraRepository == null)
-                    _obraRepository = new ObraRepository(_repositoryContext);
-                return _obraRepository;
-            }
-        }
-        public async Task SaveAsync()
-        {
-            await _repositoryContext.SaveChangesAsync();
-            
-        }
+        public UserManager<User> Users => _userRepository;
+
+
+        public IUnitOfWork UnitOfWork => _unitOfWork.Value;
+
     }
 }

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Contracts.Repository
 {
     public interface IRepositoryManager
     {
         IObraRepository Obras { get; }
-        Task SaveAsync();
+        UserManager<User> Users { get; }
+        IUnitOfWork UnitOfWork { get; }
 
     }
 }
