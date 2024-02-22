@@ -1,10 +1,6 @@
 ﻿using Contracts.Services;
 using Entities.DTO.Request;
-using Entities.DTO.Response;
-using Entities.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
 
 namespace AltamiraProject.Controllers
 {
@@ -28,18 +24,6 @@ namespace AltamiraProject.Controllers
         {
             var user = await _serviceManager.UserService.GetUserByIdAsync(id);
             return Ok(user);
-        }
-        [HttpGet("{id}/roles")]
-        public async Task<IActionResult> GetAllRoles(Guid id)
-        {
-            var result = await _serviceManager.UserService.GetUserWithDetailAsync(id);
-            return Ok(result);
-        }
-        [HttpGet("role/{roleId}")]
-        public async Task<IActionResult> GetUserInRole(Guid roleId)
-        {
-            var users = await _serviceManager.RoleService.GetUserInRole(roleId);
-            return Ok(users);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id,[FromBody] UserToUpdateDTO user)

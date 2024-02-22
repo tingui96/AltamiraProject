@@ -1,9 +1,8 @@
 ﻿using Contracts;
 using Contracts.Services;
+using Entities.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace AltamiraProject.Controllers
 {
@@ -24,6 +23,30 @@ namespace AltamiraProject.Controllers
         {
             var obras = await _serviceManager.ObraService.GetAllObrasAsync();
             return Ok(obras);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetObraById(Guid id)
+        {
+            var obra = await _serviceManager.ObraService.GetObrabyIdAsync(id);
+            return Ok(obra);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateObra(ObraModel obraModel)
+        {
+            var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
+            return Ok(obra);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateObra(Guid id, ObraToUpdateDTO obraToUpdate)
+        {
+            await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteObra(Guid id)
+        {
+            await _serviceManager.ObraService.DeleteObraAsync(id);
+            return Ok();
         }
     }
 }

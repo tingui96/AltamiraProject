@@ -14,7 +14,6 @@ namespace Contracts.Services
     {
         Task<IEnumerable<UserResponse>> GetAllUserAsync();
         Task<UserResponse> GetUserByIdAsync(Guid userId);
-        Task<UserWithDetail> GetUserWithDetailAsync(Guid userId);
         Task UpdateUserAsync(Guid userId, UserToUpdateDTO userModel);
         Task DeleteUserAsync(Guid id);
     }

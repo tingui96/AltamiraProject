@@ -1,14 +1,15 @@
-﻿namespace Entities.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Entities.Models
 {
-    public class User : Entity
+    public class User : IdentityUser, IEntity
     {
         public string Name { get; set; }
-        public string UserName { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
         public bool Activo { get; set; }
-        public IEnumerable<Role> Roles { get; set; } = Enumerable.Empty<Role>();
 
+        public Guid GetId()
+        {
+            return Guid.Parse(Id);
+        }
     }
 }

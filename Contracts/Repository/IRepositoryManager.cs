@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Contracts.Repository
 {
     public interface IRepositoryManager
     {
         IObraRepository Obras { get; }
-        IUserRepository Users { get; }
-        IRoleRepository Roles { get; }
+        UserManager<User> Users { get; }
         IUnitOfWork UnitOfWork { get; }
 
     }

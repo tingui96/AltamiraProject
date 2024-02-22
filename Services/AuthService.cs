@@ -27,7 +27,7 @@ namespace Services
         public async Task<AuthResponse> LoginAsync(LoginModel model)
         {
             var userToVerify = await UserExists(model.Usuario);
-            var check = CheckPassword(userToVerify, model.Password);
+            var check = await _repositoryManager.Users.CheckPasswordAsync(userToVerify, model.Password);
             if (check)
             {
                 var claims = await GetClaims(userToVerify);
@@ -40,8 +40,7 @@ namespace Services
         public async Task<UserResponse> RegisterAsync(RegisterModel model)
         {
             var user = model.Adapt<User>();
-            user.Password = HashPassword(model.Password);
-            _repositoryManager.Users.CreateUser(user); 
+            await _repositoryManager.Users.CreateAsync(user,model.Password); 
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
             var result = user.Adapt<UserResponse>();
             return await Task.FromResult(result);
@@ -49,16 +48,8 @@ namespace Services
 
         private async Task<User> UserExists(string Username)
         {
-            var user = await _repositoryManager.Users.GetUserByUserNameAsync(Username) ?? throw new Exception("User not exist");
+            var user = await _repositoryManager.Users.FindByNameAsync(Username) ?? throw new Exception("User not exist");
             return await Task.FromResult(user);
-        }
-        private bool CheckPassword(User user, string Password)
-        {
-            return Crypto.VerifyHashedPassword(user.Password, Password);
-        }
-        private string HashPassword(string password)
-        {
-            return Crypto.HashPassword(password);
         }
         private async Task<List<Claim>> GetClaims(User user)
         {
@@ -70,10 +61,10 @@ namespace Services
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, issuer),
             };
 
-            var roles = (await _repositoryManager.Users.GetUserWithDetailAsync(user.Id)).Roles;            
+            var roles = await _repositoryManager.Users.GetRolesAsync(user);            
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role,role.Name));
+                claims.Add(new Claim(ClaimTypes.Role,role));
             }
             return claims;
         }
