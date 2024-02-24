@@ -7,6 +7,7 @@ namespace Contracts.Repository
     {
         IObraRepository Obras { get; }
         UserManager<User> Users { get; }
+        RoleManager<IdentityRole> Roles { get; }
         IUnitOfWork UnitOfWork { get; }
 
     }

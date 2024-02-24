@@ -2,6 +2,7 @@
 using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,8 @@ namespace Contracts.Services
     {
         Task<IEnumerable<UserResponse>> GetAllUserAsync();
         Task<UserResponse> GetUserByIdAsync(Guid userId);
-        Task UpdateUserAsync(Guid userId, UserToUpdateDTO userModel);
-        Task DeleteUserAsync(Guid id);
+        Task<IdentityResult> UpdateUserAsync(Guid userId, UserToUpdateDTO userModel);
+        Task<IdentityResult> DeleteUserAsync(Guid id);
+        Task<IdentityResult> AddRoleToUser(Guid roleId, Guid userId);
     }
 }

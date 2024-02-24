@@ -4,6 +4,7 @@ using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Models;
 using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services
@@ -16,11 +17,20 @@ namespace Services
             _repositoryManager = repositoryManager;
         }
 
-        public async Task DeleteUserAsync(Guid id)
+        public async Task<IdentityResult> AddRoleToUser(Guid roleId, Guid userId)
+        {
+            var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new Exception("User not found");
+            var role = await _repositoryManager.Roles.FindByIdAsync(roleId.ToString()) ?? throw new Exception("Role not found");
+            var result = await _repositoryManager.Users.AddToRoleAsync(user, role.NormalizedName);
+            return await Task.FromResult(result);
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(Guid id)
         {
             var user = await _repositoryManager.Users.FindByIdAsync(id.ToString()) ?? throw new Exception("User not found");
-            await _repositoryManager.Users.DeleteAsync(user);
+            var result  = await _repositoryManager.Users.DeleteAsync(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            return await Task.FromResult(result);
         }
 
         public async Task<IEnumerable<UserResponse>> GetAllUserAsync()
@@ -37,12 +47,13 @@ namespace Services
             return await Task.FromResult(result);
         }
 
-        public async Task UpdateUserAsync(Guid userId, UserToUpdateDTO userModel)
+        public async Task<IdentityResult> UpdateUserAsync(Guid userId, UserToUpdateDTO userModel)
         {
             var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new Exception("User not found");
-            var result = userModel.Adapt(user);
-            await _repositoryManager.Users.UpdateAsync(result);
+            var userToUpdate = userModel.Adapt(user);
+            var result = await _repositoryManager.Users.UpdateAsync(userToUpdate);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            return await Task.FromResult(result);
         }
     }
 }

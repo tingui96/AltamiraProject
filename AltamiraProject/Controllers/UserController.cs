@@ -16,7 +16,7 @@ namespace AltamiraProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUser()
         {
-            var users = await _serviceManager.UserService.GetAllUserAsync();            
+            var users = await _serviceManager.UserService.GetAllUserAsync();
             return Ok(users);
         }
         [HttpGet("{id}")]
@@ -26,16 +26,22 @@ namespace AltamiraProject.Controllers
             return Ok(user);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id,[FromBody] UserToUpdateDTO user)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserToUpdateDTO user)
         {
-            await _serviceManager.UserService.UpdateUserAsync(id, user);
-            return Ok();
+            var result = await _serviceManager.UserService.UpdateUserAsync(id, user);
+            return Ok(result);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            await _serviceManager.UserService.DeleteUserAsync(id);
-            return Ok();
+            var result = await _serviceManager.UserService.DeleteUserAsync(id);
+            return Ok(result);
+        }
+        [HttpPost("{id}/addrole")]
+        public async Task<IActionResult> AddRoleToUser(Guid id,Guid roleId)
+        {
+            var result = await _serviceManager.UserService.AddRoleToUser(roleId, id);
+            return Ok(result);
         }
     }
 }

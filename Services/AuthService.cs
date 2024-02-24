@@ -27,6 +27,7 @@ namespace Services
         public async Task<AuthResponse> LoginAsync(LoginModel model)
         {
             var userToVerify = await UserExists(model.Usuario);
+            if (!userToVerify.Activo) throw new Exception("User inactive"); 
             var check = await _repositoryManager.Users.CheckPasswordAsync(userToVerify, model.Password);
             if (check)
             {
