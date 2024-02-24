@@ -16,6 +16,7 @@ namespace Entities.Models
         [Required]
         public TypeEnum Tipo { get; set; }
         public string Descripcion { get; set; } = string.Empty;
+        public string PhotoUrl { get; set; }
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
 

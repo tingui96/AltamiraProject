@@ -16,5 +16,6 @@ namespace Entities.DTO.Request
         public TypeEnum Tipo { get; set; }
         [Required]
         public string Descripcion { get; set; } = string.Empty;
+        public Guid userId { get; set; }
     }
 }

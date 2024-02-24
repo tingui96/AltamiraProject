@@ -6,7 +6,8 @@ namespace Entities.Models
     {
         public string Name { get; set; }
         public bool Activo { get; set; }
-
+        public string PhotoUrl { get; set; }
+        public string Biography { get; set; }
         public ICollection<Obra> Obras { get; set; }
         public Guid GetId()
         {

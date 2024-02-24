@@ -24,8 +24,9 @@ namespace Repository
         public async Task<IEnumerable<Obra>> GetAllObrasAsync(bool trackChanges)
         {
             return await FindAll(trackChanges)
-            .OrderBy(O => O.Titulo)
-            .ToListAsync();
+                .Include(x => x.User)
+                .OrderBy(O => O.Titulo)
+                .ToListAsync();
         }
         public async Task<Obra> GetObraByIdAsync(Guid obraId,bool trackChanges)
         {
