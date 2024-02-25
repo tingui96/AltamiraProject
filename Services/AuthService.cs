@@ -33,7 +33,8 @@ namespace Services
             {
                 var claims = await GetClaims(userToVerify);
                 var token = GetToken(claims);
-                return new AuthResponse(token);
+                var user = userToVerify.Adapt<UserResponse>();
+                return new AuthResponse(token, user);
             }
             throw new Exception("Wrong password");
         }
