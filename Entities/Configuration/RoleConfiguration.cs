@@ -15,14 +15,17 @@ namespace Entities.Configuration
                 new IdentityRole
                 {
                     Name = RoleEnum.Viewer.ToString(),
+                    NormalizedName = RoleEnum.Viewer.ToString().ToUpper(),
                 },
                 new IdentityRole
                 {
                     Name = RoleEnum.Artist.ToString(),
+                    NormalizedName = RoleEnum.Artist.ToString().ToUpper(),
                 },
                 new IdentityRole
                 {
-                    Name = RoleEnum.Administrador.ToString()
+                    Name = RoleEnum.Administrador.ToString().ToUpper(),
+                    NormalizedName = RoleEnum.Administrador.ToString().ToUpper(),
                 });
         }
     }

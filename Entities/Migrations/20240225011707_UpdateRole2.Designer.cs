@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240225011707_UpdateRole2")]
+    partial class UpdateRole2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,21 +167,19 @@ namespace Entities.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "75b031ee-58f3-421c-9690-931ff7626cfc",
+                            Id = "1b12f85e-5b6a-4810-befe-0ad1d0b3e190",
                             Name = "Viewer",
                             NormalizedName = "VIEWER"
                         },
                         new
                         {
-                            Id = "6de4ea4c-8a22-48e2-82eb-c6ff33616b0f",
-                            Name = "Artist",
-                            NormalizedName = "ARTIST"
+                            Id = "a82af65e-897a-4d56-9f58-ccb1ef3144c8",
+                            Name = "ARTIST"
                         },
                         new
                         {
-                            Id = "89909dc5-3ff7-4659-a657-1c7a73b2a478",
-                            Name = "ADMINISTRADOR",
-                            NormalizedName = "ADMINISTRADOR"
+                            Id = "cd82a766-df1c-4812-9890-a5607bbf90fd",
+                            Name = "ADMINISTRADOR"
                         });
                 });
 

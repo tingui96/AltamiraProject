@@ -1,5 +1,4 @@
 ﻿using AltamiraProject.CustomExceptionMiddleware;
-using Contracts;
 
 namespace AltamiraProject.Extensions
 {

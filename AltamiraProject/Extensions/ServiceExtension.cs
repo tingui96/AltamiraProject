@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AltamiraProject.Validation;
+using Contracts;
 using Contracts.Repository;
 using Contracts.Services;
 using Entities;
@@ -94,6 +95,10 @@ namespace AltamiraProject.Extensions
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<IServiceManager,ServiceManager>();
+        }
+        public static void ConfigureValidation(this IServiceCollection services)
+        {
+            services.AddScoped<ModelValidationAttribute>();
         }
     }
 
