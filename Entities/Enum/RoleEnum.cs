@@ -2,7 +2,7 @@
 {
     public enum RoleEnum
     {
-        Admin ,
+        Administrador ,
         Artist,
         Viewer
     }

@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Enum;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Entities
                 foreach (var user in users)
                 {
                     await userManager.CreateAsync(user, "Ydnay123.");
-                    await userManager.AddToRoleAsync(user, "Administrador");
+                    await userManager.AddToRoleAsync(user, RoleEnum.Administrador.ToString());
                 }
             }
         }

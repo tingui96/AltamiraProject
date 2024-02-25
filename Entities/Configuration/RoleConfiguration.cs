@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Entities.Enum;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,18 +14,15 @@ namespace Entities.Configuration
             builder.HasData(
                 new IdentityRole
                 {
-                    Name = "Visitor",
-                    NormalizedName = "VISITOR"
+                    Name = RoleEnum.Viewer.ToString(),
                 },
                 new IdentityRole
                 {
-                    Name = "Artist",
-                    NormalizedName = "ARTIST"
+                    Name = RoleEnum.Artist.ToString(),
                 },
                 new IdentityRole
                 {
-                    Name = "Administrator",
-                    NormalizedName = "ADMINISTRATOR"
+                    Name = RoleEnum.Administrador.ToString()
                 });
         }
     }

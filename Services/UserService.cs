@@ -2,6 +2,7 @@
 using Contracts.Services;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
+using Entities.Enum;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace Services
         {
             var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new Exception("User not found");
             var role = await _repositoryManager.Roles.FindByIdAsync(roleId.ToString()) ?? throw new Exception("Role not found");
-            var result = await _repositoryManager.Users.AddToRoleAsync(user, role.NormalizedName);
+            var result = await _repositoryManager.Users.AddToRoleAsync(user, role: role.Name);
             return await Task.FromResult(result);
         }
 
@@ -52,6 +53,12 @@ namespace Services
             var userToUpdate = userModel.Adapt(user);
             var result = await _repositoryManager.Users.UpdateAsync(userToUpdate);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            return await Task.FromResult(result);
+        }
+        public async Task<IEnumerable<UserResponse>> GetAllArtistAsync()
+        {
+            var artists = await _repositoryManager.Users.GetUsersInRoleAsync(RoleEnum.Artist.ToString());
+            var result = artists.Adapt<IEnumerable<UserResponse>>();
             return await Task.FromResult(result);
         }
     }
