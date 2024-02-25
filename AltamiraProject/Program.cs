@@ -1,5 +1,7 @@
 using AltamiraProject.Extensions;
-using Contracts;
+using Entities;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,5 +43,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 app.MapControllers();
-
+//Seed
+using(var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    await Seed.SeedData(userManager);
+}
 app.Run();

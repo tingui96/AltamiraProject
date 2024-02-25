@@ -2,7 +2,6 @@
 using Contracts.Services;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
-using Entities.Models;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

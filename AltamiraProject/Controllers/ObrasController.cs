@@ -31,18 +31,21 @@ namespace AltamiraProject.Controllers
             return Ok(obra);
         }
         [HttpPost]
+        [Authorize(Roles = "Artist")]
         public async Task<IActionResult> CreateObra(ObraModel obraModel)
         {
             var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
             return Ok(obra);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Artist")]
         public async Task<IActionResult> UpdateObra(Guid id, ObraToUpdateDTO obraToUpdate)
         {
             await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
             return Ok();
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Artist")]
         public async Task<IActionResult> DeleteObra(Guid id)
         {
             await _serviceManager.ObraService.DeleteObraAsync(id);

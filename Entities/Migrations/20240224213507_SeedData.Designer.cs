@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240224213507_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,6 +72,7 @@ namespace Entities.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Biography")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -110,6 +114,7 @@ namespace Entities.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PhotoUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -164,19 +169,19 @@ namespace Entities.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "06f2f818-f798-4e1f-88c2-4b5d640c7005",
+                            Id = "8d507a1a-6b05-44fc-a8f2-ad7370b0ef03",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "0712f005-198e-4d1f-abfc-2dc6d4cb781d",
+                            Id = "cf1be5d1-b1ba-4138-ba04-b635afb8c3b0",
                             Name = "Artist",
                             NormalizedName = "ARTIST"
                         },
                         new
                         {
-                            Id = "17bcddfb-7b53-4a6e-81ea-9382cece18c2",
+                            Id = "4049313d-7274-4fab-b0bf-6bc8fd2fef86",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

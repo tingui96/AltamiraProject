@@ -7,14 +7,11 @@ using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog;
 using Repository;
 using Services;
 using Swashbuckle.AspNetCore.Filters;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace AltamiraProject.Extensions
