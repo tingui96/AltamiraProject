@@ -3,6 +3,8 @@ using Contracts.Services;
 using CryptoHelper;
 using Entities.DTO;
 using Entities.DTO.Response;
+using Entities.Exceptions.BadRequest;
+using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Mapster;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +29,7 @@ namespace Services
         public async Task<AuthResponse> LoginAsync(LoginModel model)
         {
             var userToVerify = await UserExists(model.Usuario);
-            if (!userToVerify.Activo) throw new Exception("User inactive"); 
+            if (!userToVerify.Activo) throw new UserNotFoundException();
             var check = await _repositoryManager.Users.CheckPasswordAsync(userToVerify, model.Password);
             if (check)
             {
@@ -36,7 +38,7 @@ namespace Services
                 var user = userToVerify.Adapt<UserResponse>();
                 return new AuthResponse(token, user);
             }
-            throw new Exception("Wrong password");
+            throw new PasswordBadRequestException();
         }
 
         public async Task<UserResponse> RegisterAsync(RegisterModel model)
@@ -50,7 +52,7 @@ namespace Services
 
         private async Task<User> UserExists(string Username)
         {
-            var user = await _repositoryManager.Users.FindByNameAsync(Username) ?? throw new Exception("User not exist");
+            var user = await _repositoryManager.Users.FindByNameAsync(Username) ?? throw new UserNotFoundException();
             return await Task.FromResult(user);
         }
         private async Task<List<Claim>> GetClaims(User user)

@@ -2,6 +2,7 @@
 using Contracts.Services;
 using Entities.DTO.Request;
 using Entities.DTO.Response;
+using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Mapster;
 
@@ -26,7 +27,7 @@ namespace Services
 
         public async Task DeleteObraAsync(Guid obraId)
         {
-            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId);
+            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
             _repositoryManager.Obras.DeleteObra(obra);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
@@ -40,14 +41,14 @@ namespace Services
 
         public async Task<ObraResponse> GetObrabyIdAsync(Guid obraId)
         {
-            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId);
+            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
             var result = obra.Adapt<ObraResponse>();
             return await Task.FromResult(result);
         }
 
         public async Task UpdateObraAsync(Guid obraId, ObraToUpdateDTO model)
         {
-            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId);
+            var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
             var result = model.Adapt(obra);
             _repositoryManager.Obras.UpdateObra(result);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
