@@ -1,13 +1,18 @@
-﻿namespace AltamiraProject.ApiResponse
+﻿using Newtonsoft.Json;
+
+namespace AltamiraProject.ApiResponse
 {
-    public abstract class BasicResponse
+    public class BasicResponse
     {
-        public int StatusCode { get; set; }
-        public string Message { get; set; }
-        public BasicResponse(int statusCode, string message = null)
+        public int StatusCode { get; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Message { get;  }
+        public int CustomStatusCode { get; }
+        public BasicResponse(int statusCode, string message = null, int customStatusCode = 0)
         {
             StatusCode = statusCode;
             Message = message;
+            CustomStatusCode = customStatusCode;
         }
     }
 }
