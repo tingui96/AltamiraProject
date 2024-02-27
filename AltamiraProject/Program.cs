@@ -38,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+//agregar cors
+app.UseCors("CorsPolicy");
 //Agregar Authentication
 app.UseAuthentication();
 
