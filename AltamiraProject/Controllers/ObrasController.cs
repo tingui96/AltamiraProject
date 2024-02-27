@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AltamiraProject.ApiResponse;
+using Contracts;
 using Contracts.Services;
 using Entities.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
@@ -22,34 +23,34 @@ namespace AltamiraProject.Controllers
         public async Task<IActionResult> GetAllObras() 
         {
             var obras = await _serviceManager.ObraService.GetAllObrasAsync();
-            return Ok(obras);
+            return Ok(new ApiOkResponse(obras));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetObraById(Guid id)
         {
             var obra = await _serviceManager.ObraService.GetObrabyIdAsync(id);
-            return Ok(obra);
+            return Ok(new ApiOkResponse(obra));
         }
         [HttpPost]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> CreateObra(ObraModel obraModel)
         {
             var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
-            return Ok(obra);
+            return Ok(new ApiOkResponse(obra));
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> UpdateObra(Guid id, ObraToUpdateDTO obraToUpdate)
         {
             await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
-            return Ok();
+            return Ok(new ApiOkResponse());
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> DeleteObra(Guid id)
         {
             await _serviceManager.ObraService.DeleteObraAsync(id);
-            return Ok();
+            return Ok(new ApiOkResponse());
         }
     }
 }

@@ -2,8 +2,14 @@
 {
     public class ApiOkResponse : BasicResponse
     {
-        public ApiOkResponse(object result) : base (200,result,"Ok")
+        public object result { get; set; }
+        public ApiOkResponse(object result) : base (200)
         {
+            this.result = result;
+        }
+        public ApiOkResponse() : base(200)
+        {
+            this.result = "Ok";
         }
     }
 }
