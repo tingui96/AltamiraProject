@@ -44,7 +44,8 @@ namespace Services
         public async Task<UserResponse> RegisterAsync(RegisterModel model)
         {
             var user = model.Adapt<User>();
-            await _repositoryManager.Users.CreateAsync(user,model.Password); 
+            var identityResult = await _repositoryManager.Users.CreateAsync(user,model.Password);
+            if(identityResult.Errors.Any()) throw new RegisterBadRequestException(identityResult.Errors); 
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
             var result = user.Adapt<UserResponse>();
             return await Task.FromResult(result);
