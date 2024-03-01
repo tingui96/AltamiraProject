@@ -10,9 +10,7 @@ namespace AltamiraProject.Validation
         {
             if (!context.ModelState.IsValid)
             {
-                var errors = context.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
-                throw new ModelBadRequestException(errors);
-
+                context.Result = new BadRequestObjectResult(context.ModelState);
             }
         }
     }
