@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240302034704_update-all")]
+    partial class updateall
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,19 +167,19 @@ namespace Entities.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ba53957e-51f1-4706-bbb9-a7274169440b",
+                            Id = "2a307940-bec7-4d4e-89f1-fa4bb6ccb35c",
                             Name = "Viewer",
                             NormalizedName = "VIEWER"
                         },
                         new
                         {
-                            Id = "16fab165-7984-49bd-b855-d18d28797474",
+                            Id = "3e218c4d-8ead-42d7-9beb-6032f67f1a62",
                             Name = "Artist",
                             NormalizedName = "ARTIST"
                         },
                         new
                         {
-                            Id = "50e7ad1a-305a-49b0-b305-1d31af4db0c8",
+                            Id = "a698efbe-9b12-450b-98d8-b18f5fa10a04",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         });
