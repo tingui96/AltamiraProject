@@ -1,9 +1,7 @@
 ﻿using Contracts.Repository;
 using Contracts.Services;
-using CryptoHelper;
 using Entities.DTO;
 using Entities.DTO.Response;
-using Entities.Enum;
 using Entities.Exceptions.BadRequest;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
