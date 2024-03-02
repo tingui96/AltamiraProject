@@ -1,5 +1,4 @@
-﻿using Entities.Exceptions.BadRequest;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace AltamiraProject.Validation

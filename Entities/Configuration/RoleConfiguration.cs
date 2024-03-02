@@ -24,7 +24,7 @@ namespace Entities.Configuration
                 },
                 new IdentityRole
                 {
-                    Name = RoleEnum.Administrador.ToString().ToUpper(),
+                    Name = RoleEnum.Administrador.ToString(),
                     NormalizedName = RoleEnum.Administrador.ToString().ToUpper(),
                 });
         }

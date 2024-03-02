@@ -3,6 +3,7 @@ using Contracts.Services;
 using CryptoHelper;
 using Entities.DTO;
 using Entities.DTO.Response;
+using Entities.Enum;
 using Entities.Exceptions.BadRequest;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
@@ -33,10 +34,12 @@ namespace Services
             var check = await _repositoryManager.Users.CheckPasswordAsync(userToVerify, model.Password);
             if (check)
             {
-                var claims = await GetClaims(userToVerify);
+                var roles = await _repositoryManager.Users.GetRolesAsync(userToVerify);
+                var role = roles.Count > 0 ? roles.First() : throw new UserNotFoundException();
+                var claims = GetClaims(userToVerify,roles);
                 var token = GetToken(claims);
                 var user = userToVerify.Adapt<UserResponse>();
-                return new AuthResponse(token, user);
+                return new AuthResponse(token, user, role);
             }
             throw new PasswordBadRequestException();
         }
@@ -45,8 +48,8 @@ namespace Services
         {
             var user = model.Adapt<User>();
             var identityResult = await _repositoryManager.Users.CreateAsync(user,model.Password);
-            if(identityResult.Errors.Any()) throw new RegisterBadRequestException(identityResult.Errors); 
-            await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            if(identityResult.Errors.Any())
+                throw new RegisterBadRequestException(identityResult.Errors); 
             var result = user.Adapt<UserResponse>();
             return await Task.FromResult(result);
         }
@@ -54,9 +57,10 @@ namespace Services
         private async Task<User> UserExists(string Username)
         {
             var user = await _repositoryManager.Users.FindByNameAsync(Username) ?? throw new UserNotFoundException();
+            if(!user.Activo) throw new UserNotFoundException();
             return await Task.FromResult(user);
         }
-        private async Task<List<Claim>> GetClaims(User user)
+        private List<Claim> GetClaims(User user,IList<string> roles)
         {
             var issuer = _configuration.GetSection("Jwt")["Issuer"];
             var claims = new List<Claim>
@@ -64,9 +68,7 @@ namespace Services
                 new Claim(ClaimTypes.Email, user.Email, ClaimValueTypes.Email, issuer),
                 new Claim(ClaimTypes.AuthenticationMethod, "bearer", ClaimValueTypes.String, issuer),
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, issuer),
-            };
-
-            var roles = await _repositoryManager.Users.GetRolesAsync(user);            
+            };           
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role,role));
