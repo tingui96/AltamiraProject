@@ -6,12 +6,12 @@ namespace Entities.Models
     public class Obra : Entity
     {
         [Required, StringLength(50)]
-        public string Titulo { get; set; } = string.Empty;
+        public string Titulo { get; set; }
         [Required]
         public TypeEnum Tipo { get; set; }
-        public string Descripcion { get; set; } = string.Empty;
+        public string Descripcion { get; set; }
         public string PhotoUrl { get; set; }
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public virtual User User { get; set; }
 
     }

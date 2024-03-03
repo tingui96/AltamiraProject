@@ -25,7 +25,7 @@ namespace Services
             return await Task.FromResult(result);
         }
 
-        public async Task DeleteObraAsync(Guid obraId)
+        public async Task DeleteObraAsync(int obraId)
         {
             var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
             _repositoryManager.Obras.DeleteObra(obra);
@@ -39,19 +39,22 @@ namespace Services
             return await Task.FromResult(result);
         }
 
-        public async Task<ObraResponse> GetObrabyIdAsync(Guid obraId)
+        public async Task<ObraResponse> GetObrabyIdAsync(int obraId)
         {
             var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
             var result = obra.Adapt<ObraResponse>();
             return await Task.FromResult(result);
         }
 
-        public async Task UpdateObraAsync(Guid obraId, ObraToUpdateDTO model)
+        public async Task<ObraResponse> UpdateObraAsync(int obraId, ObraToUpdateDTO model)
         {
             var obra = await _repositoryManager.Obras.GetObraByIdAsync(obraId) ?? throw new ObraNotFoundException();
-            var result = model.Adapt(obra);
-            _repositoryManager.Obras.UpdateObra(result);
+            var entity = model.Adapt(obra);
+            _repositoryManager.Obras.UpdateObra(entity);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            var result = entity.Adapt<ObraResponse>();
+            return await Task.FromResult(result);
+
         }
     }
 }

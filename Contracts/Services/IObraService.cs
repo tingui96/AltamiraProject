@@ -11,9 +11,9 @@ namespace Contracts.Services
     public interface IObraService
     {
         Task<IEnumerable<ObraResponse>> GetAllObrasAsync();
-        Task<ObraResponse> GetObrabyIdAsync(Guid obraId);
+        Task<ObraResponse> GetObrabyIdAsync(int obraId);
         Task<ObraResponse> CreateObraAsync(ObraModel obra);
-        Task UpdateObraAsync(Guid obraId,ObraToUpdateDTO obra);
-        Task DeleteObraAsync(Guid obraId);
+        Task<ObraResponse> UpdateObraAsync(int obraId,ObraToUpdateDTO obra);
+        Task DeleteObraAsync(int obraId);
     }
 }

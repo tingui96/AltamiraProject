@@ -63,11 +63,6 @@ namespace AltamiraProject.Extensions
         {
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
-        public static void ConfigureIdentity(this IServiceCollection services)
-        {
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<RepositoryContext>();
-        }
         public static void ConfigureDatabase(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config["ConnectionStrings:sqlConnection"];

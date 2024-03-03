@@ -28,7 +28,7 @@ namespace Repository
                 .OrderBy(O => O.Titulo)
                 .ToListAsync();
         }
-        public async Task<Obra> GetObraByIdAsync(Guid obraId,bool trackChanges)
+        public async Task<Obra> GetObraByIdAsync(int obraId,bool trackChanges)
         {
             var obra = await FindByCondition(obra =>
                 obra.Id.Equals(obraId), trackChanges)
