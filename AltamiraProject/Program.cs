@@ -15,7 +15,6 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureDatabase(builder.Configuration);
-builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.ConfigureValidation();
 builder.Services.AddControllers();
@@ -45,10 +44,4 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 app.MapControllers();
-//Seed
-using(var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    await Seed.SeedData(userManager);
-}
 app.Run();

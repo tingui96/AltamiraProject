@@ -18,47 +18,48 @@ namespace Services
             _repositoryManager = repositoryManager;
         }
 
-        public async Task<IdentityResult> AddRoleToUser(Guid roleId, Guid userId)
+        public async Task AddRoleToUser(int roleId, int userId)
         {
-            var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
-            var role = await _repositoryManager.Roles.FindByIdAsync(roleId.ToString()) ?? throw new UserNotFoundException();
-            var result = await _repositoryManager.Users.AddToRoleAsync(user, role: role.Name);
-            return await Task.FromResult(result);
+            var user = await _repositoryManager.Users.GetUserByIdAsync(userId) ?? throw new UserNotFoundException();
+            var role = await _repositoryManager.Roles.GetRoleByIdAsync(roleId) ?? throw new UserNotFoundException();
+            user.Role = role;
+            await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IdentityResult> DeleteUserAsync(Guid id)
+        public async Task DeleteUserAsync(int id)
         {
-            var user = await _repositoryManager.Users.FindByIdAsync(id.ToString()) ?? throw new UserNotFoundException();
-            var result  = await _repositoryManager.Users.DeleteAsync(user);
+            var user = await _repositoryManager.Users.GetUserByIdAsync(id) ?? throw new UserNotFoundException();
+            _repositoryManager.Users.DeleteUser(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
-            return await Task.FromResult(result);
         }
 
         public async Task<IEnumerable<UserResponse>> GetAllUserAsync()
         {
-            var users = await _repositoryManager.Users.Users.ToListAsync();
+            var users = await _repositoryManager.Users.GetAllUsersAsync();
             var result = users.Adapt<IEnumerable<UserResponse>>();
             return await Task.FromResult(result);
         }
 
-        public async Task<UserResponse> GetUserByIdAsync(Guid userId)
+        public async Task<UserResponse> GetUserByIdAsync(int userId)
         {
-            var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
+            var user = await _repositoryManager.Users.GetUserByIdAsync(userId) ?? throw new UserNotFoundException();
             var result = user.Adapt<UserResponse>();
             return await Task.FromResult(result);
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(Guid userId, UserToUpdateDTO userModel)
+        public async Task<UserResponse> UpdateUserAsync(int userId, UserToUpdateDTO userModel)
         {
-            var user = await _repositoryManager.Users.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
+            var user = await _repositoryManager.Users.GetUserByIdAsync(userId) ?? throw new UserNotFoundException();
             var userToUpdate = userModel.Adapt(user);
-            var result = await _repositoryManager.Users.UpdateAsync(userToUpdate);
+            _repositoryManager.Users.UpdateUser(userToUpdate);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
+            var result = userToUpdate.Adapt<UserResponse>();
             return await Task.FromResult(result);
         }
         public async Task<IEnumerable<UserResponse>> GetAllArtistAsync()
         {
-            var artists = await _repositoryManager.Users.GetUsersInRoleAsync(RoleEnum.Artist.ToString());
+            var role = await _repositoryManager.Roles.GetRoleByNameAsync(RoleEnum.Artist.ToString());
+            var artists = role.Users;
             var result = artists.Adapt<IEnumerable<UserResponse>>();
             return await Task.FromResult(result);
         }

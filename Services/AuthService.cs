@@ -1,16 +1,21 @@
 ﻿using Contracts.Repository;
 using Contracts.Services;
+using CryptoHelper;
 using Entities.DTO;
 using Entities.DTO.Response;
+using Entities.Enum;
 using Entities.Exceptions.BadRequest;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Services
 {
@@ -29,36 +34,70 @@ namespace Services
         {
             var userToVerify = await UserExists(model.Usuario);
             if (!userToVerify.Activo) throw new UserNotFoundException();
-            var check = await _repositoryManager.Users.CheckPasswordAsync(userToVerify, model.Password);
+            var check = VerifyPassword(userToVerify.Password, model.Password);
             if (check)
             {
-                var roles = await _repositoryManager.Users.GetRolesAsync(userToVerify);
-                var role = roles.Count > 0 ? roles.First() : throw new UserNotFoundException();
-                var claims = GetClaims(userToVerify,roles);
+
+                var role = userToVerify.Role;
+                var claims = GetClaims(userToVerify,role);
                 var token = GetToken(claims);
                 var user = userToVerify.Adapt<UserResponse>();
-                return new AuthResponse(token, user, role);
+                return new AuthResponse(token, user);
             }
             throw new PasswordBadRequestException();
         }
-
-        public async Task<UserResponse> RegisterAsync(RegisterModel model)
+        
+        public async Task RegisterAsync(RegisterModel model)
         {
             var user = model.Adapt<User>();
-            var identityResult = await _repositoryManager.Users.CreateAsync(user,model.Password);
-            if(identityResult.Errors.Any())
-                throw new RegisterBadRequestException(identityResult.Errors); 
-            var result = user.Adapt<UserResponse>();
-            return await Task.FromResult(result);
+            var findUserName = await _repositoryManager.Users.GetAllUsers(x => x.UserName.Equals(model.UserName) || x.Email.Equals(model.Email))
+                .FirstOrDefaultAsync();
+            if(findUserName is not null && findUserName.UserName.ToLower() == model.UserName.ToLower()) throw new UserExistBadRequestException();
+            if (findUserName is not null && findUserName.Email == model.UserName) throw new EmailExistBadRequestException();
+            if (!VerifyEmail(model.Email)) throw new EmailExpectedBadRequestException();
+            IsValidPassword(model.Password);
+            if (model.Password != model.ConfirmPassword) throw new PasswordConfirmBadRequestException();
+            user.Password = HashPassword(user.Password);
+            user.RoleId = (int)RoleEnum.Viewer;
+            _repositoryManager.Users.CreateUser(user);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync();
+        }
+
+        private string HashPassword(string password)
+        {
+            return Crypto.HashPassword(password);
+        }
+        // Method to verify the password hash against the given password
+        private bool VerifyPassword(string hash, string password)
+        {
+            return Crypto.VerifyHashedPassword(hash, password);
+        }
+        private bool VerifyEmail(string email)
+        {
+            string pattern = @"^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$";
+            return Regex.IsMatch(email, pattern);
+        }
+        private bool IsValidPassword(string password)
+        {
+            string pattern = @"[A-Z]";
+            if (!Regex.IsMatch(password, pattern)) throw new PasswordUpperBadRequestException();
+            pattern = @"\d";
+            if (!Regex.IsMatch(password, pattern)) throw new PasswordNumberBadRequestException();
+            pattern = @"[a-z]";
+            if (!Regex.IsMatch(password, pattern)) throw new PasswordLowerBadRequestException();
+            //pattern = @"[!@#$%^&*()_+=|<>?{}\\[\\]~-]";
+            //if (!Regex.IsMatch(password, pattern)) throw new PasswordCharacterBadRequestException();
+            if (password.Length < 8) throw new PasswordLengthBadRequestException();
+            return true;
         }
 
         private async Task<User> UserExists(string Username)
         {
-            var user = await _repositoryManager.Users.FindByNameAsync(Username) ?? throw new UserNotFoundException();
+            var user = await _repositoryManager.Users.GetUserByUserNameAsync(Username) ?? throw new UserNotFoundException();
             if(!user.Activo) throw new UserNotFoundException();
             return await Task.FromResult(user);
         }
-        private List<Claim> GetClaims(User user,IList<string> roles)
+        private List<Claim> GetClaims(User user,Role role)
         {
             var issuer = _configuration.GetSection("Jwt")["Issuer"];
             var claims = new List<Claim>
@@ -66,12 +105,10 @@ namespace Services
                 new Claim(ClaimTypes.Email, user.Email, ClaimValueTypes.Email, issuer),
                 new Claim(ClaimTypes.AuthenticationMethod, "bearer", ClaimValueTypes.String, issuer),
                 new Claim(ClaimTypes.UserData, user.Id.ToString(), ClaimValueTypes.String, issuer),
-            };           
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role,role));
-            }
-            return claims;
+                new Claim(ClaimTypes.Role,role.Name,ClaimValueTypes.String, issuer)
+            };
+            return claims;         
+            
         }
         private string GetToken(IEnumerable<Claim> claims)
         {

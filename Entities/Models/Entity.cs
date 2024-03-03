@@ -1,12 +1,12 @@
 ﻿namespace Entities.Models
 {
-    public class Entity : IEntity
+    public class Entity 
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
+        public DateTime DeleteAt { get; set; }
+        public bool Deleted { get; set; }
 
-        public Guid GetId()
-        {
-            return Id;
-        }
     }
 }

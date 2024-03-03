@@ -22,31 +22,31 @@ namespace AltamiraProject.Controllers
             return Ok(new ApiOkResponse(users));
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _serviceManager.UserService.GetUserByIdAsync(id);
             return Ok(new ApiOkResponse(user));
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador,Artist")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserToUpdateDTO user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserToUpdateDTO user)
         {
             var result = await _serviceManager.UserService.UpdateUserAsync(id, user);
             return Ok(new ApiOkResponse(result));
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Artist")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var result = await _serviceManager.UserService.DeleteUserAsync(id);
-            return Ok(new ApiOkResponse(result));
+            await _serviceManager.UserService.DeleteUserAsync(id);
+            return Ok(new ApiOkResponse());
         }
         [HttpPost("{id}/addrole")]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> AddRoleToUser(Guid id,Guid roleId)
+        public async Task<IActionResult> AddRoleToUser(int id,int roleId)
         {
-            var result = await _serviceManager.UserService.AddRoleToUser(roleId, id);
-            return Ok(new ApiOkResponse(result));
+            await _serviceManager.UserService.AddRoleToUser(roleId, id);
+            return Ok(new ApiOkResponse());
         }
     }
 }

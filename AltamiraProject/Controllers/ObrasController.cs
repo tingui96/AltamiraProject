@@ -26,7 +26,7 @@ namespace AltamiraProject.Controllers
             return Ok(new ApiOkResponse(obras));
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetObraById(Guid id)
+        public async Task<IActionResult> GetObraById(int id)
         {
             var obra = await _serviceManager.ObraService.GetObrabyIdAsync(id);
             return Ok(new ApiOkResponse(obra));
@@ -40,14 +40,14 @@ namespace AltamiraProject.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Artist")]
-        public async Task<IActionResult> UpdateObra(Guid id, ObraToUpdateDTO obraToUpdate)
+        public async Task<IActionResult> UpdateObra(int id, ObraToUpdateDTO obraToUpdate)
         {
-            await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
-            return Ok(new ApiOkResponse());
+            var result = await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
+            return Ok(new ApiOkResponse(result));
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Artist")]
-        public async Task<IActionResult> DeleteObra(Guid id)
+        public async Task<IActionResult> DeleteObra(int id)
         {
             await _serviceManager.ObraService.DeleteObraAsync(id);
             return Ok(new ApiOkResponse());

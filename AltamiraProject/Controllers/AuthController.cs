@@ -17,8 +17,8 @@ namespace AltamiraProject.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
-            var result = await _serviceManager.AuthService.RegisterAsync(register);
-            return Ok(new ApiOkResponse(result));
+            await _serviceManager.AuthService.RegisterAsync(register);
+            return Ok(new ApiOkResponse());
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)

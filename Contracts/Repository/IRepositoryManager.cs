@@ -6,8 +6,8 @@ namespace Contracts.Repository
     public interface IRepositoryManager
     {
         IObraRepository Obras { get; }
-        UserManager<User> Users { get; }
-        RoleManager<IdentityRole> Roles { get; }
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
         IUnitOfWork UnitOfWork { get; }
 
     }

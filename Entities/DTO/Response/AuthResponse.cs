@@ -10,13 +10,11 @@ namespace Entities.DTO.Response
     {
         public string? Token { get; }
         public UserResponse User { get; set; }
-        public string? Role { get; set; }
        
-        public AuthResponse(string token, UserResponse userResponse, string role)
+        public AuthResponse(string token, UserResponse userResponse)
         {
             Token = token;
             User = userResponse;
-            Role = role;
         }
     }
 }

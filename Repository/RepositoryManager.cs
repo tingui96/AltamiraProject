@@ -8,25 +8,25 @@ namespace Repository
     public class RepositoryManager : IRepositoryManager
     {
         private Lazy<IObraRepository> _obraRepository;
-        private UserManager<User> _userRepository;
-        private RoleManager<IdentityRole> _roleRepository;
+        private Lazy<IUserRepository> _userRepository;
+        private Lazy<IRoleRepository> _roleRepository;
         private Lazy<IUnitOfWork> _unitOfWork;
         
-        public RepositoryManager(RepositoryContext repositoryContext,UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public RepositoryManager(RepositoryContext repositoryContext)
         {
             _obraRepository = new Lazy<IObraRepository>(() => new ObraRepository(repositoryContext));
-            _userRepository = userManager;
-            _roleRepository = roleManager;
+            _userRepository = new Lazy<IUserRepository>(() => new UserRepository(repositoryContext));
+            _roleRepository = new Lazy<IRoleRepository>(() => new RoleRepository(repositoryContext));
             _unitOfWork = new Lazy<IUnitOfWork>(() => new UnitOfWork(repositoryContext));
         }
         public IObraRepository Obras => _obraRepository.Value; 
 
-        public UserManager<User> Users => _userRepository;
+        public IUserRepository Users => _userRepository.Value;
 
 
         public IUnitOfWork UnitOfWork => _unitOfWork.Value;
 
-        public RoleManager<IdentityRole> Roles => _roleRepository;
+        public IRoleRepository Roles => _roleRepository.Value;
 
     }
 }

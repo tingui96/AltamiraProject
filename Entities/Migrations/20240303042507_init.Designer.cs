@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240303042507_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,6 +168,7 @@ namespace Entities.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhotoUrl")
@@ -195,7 +199,7 @@ namespace Entities.Migrations
                             Email = "skullcandy961205@gmail.com",
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Admin",
-                            Password = "AQAAAAEACSfAAAAAEA2wJaL7E8iSmn14y+6x5jFYAC0O11uU76utwOP22O7eMPAGbgO7w/3vnWejVWwtjg==",
+                            Password = "AQAAAAEACSfAAAAAEPT4rFyPlaZQsWmHgkxZZP8QOWUjeyEppJHOHC+BWLxGDOpOMZg84sTnp7ofokCBvg==",
                             Phone = "+5358474416",
                             RoleId = 1,
                             UserName = "Admin"

@@ -1,28 +1,29 @@
 ﻿using Entities.Enum;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Entities.Configuration
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.HasData(
-                new IdentityRole
+                new Role
                 {
-                    Name = RoleEnum.Viewer.ToString(),
-                    NormalizedName = RoleEnum.Viewer.ToString().ToUpper(),
+                    Id = 1,
+                    Name = RoleEnum.Administrador.ToString()
                 },
-                new IdentityRole
+                new Role
                 {
+                    Id = 2,
                     Name = RoleEnum.Artist.ToString(),
-                    NormalizedName = RoleEnum.Artist.ToString().ToUpper(),
                 },
-                new IdentityRole
+                new Role
                 {
-                    Name = RoleEnum.Administrador.ToString(),
-                    NormalizedName = RoleEnum.Administrador.ToString().ToUpper(),
+                    Id = 3,
+                    Name = RoleEnum.Viewer.ToString(),
                 });
         }
     }

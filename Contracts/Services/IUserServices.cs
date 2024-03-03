@@ -7,9 +7,9 @@ namespace Contracts.Services
     public interface IUserServices
     {
         Task<IEnumerable<UserResponse>> GetAllUserAsync();
-        Task<UserResponse> GetUserByIdAsync(Guid userId);
-        Task<IdentityResult> UpdateUserAsync(Guid userId, UserToUpdateDTO userModel);
-        Task<IdentityResult> DeleteUserAsync(Guid id);
-        Task<IdentityResult> AddRoleToUser(Guid roleId, Guid userId);
+        Task<UserResponse> GetUserByIdAsync(int userId);
+        Task<UserResponse> UpdateUserAsync(int userId, UserToUpdateDTO userModel);
+        Task DeleteUserAsync(int id);
+        Task AddRoleToUser(int roleId, int userId);
     }
 }
