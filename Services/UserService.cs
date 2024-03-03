@@ -63,5 +63,12 @@ namespace Services
             var result = artists.Adapt<IEnumerable<UserResponse>>();
             return await Task.FromResult(result);
         }
+        public async Task UpdateUserActiveAsync(UpdateUserActiveRequest request)
+        {
+            var user = await _repositoryManager.Users.GetUserByIdAsync(request.Id) ?? throw new UserNotFoundException();
+            user.Activo = request.Active;
+            _repositoryManager.Users.UpdateUser(user);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync();
+        }
     }
 }

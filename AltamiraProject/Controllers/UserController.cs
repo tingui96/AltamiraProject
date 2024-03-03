@@ -34,6 +34,13 @@ namespace AltamiraProject.Controllers
             var result = await _serviceManager.UserService.UpdateUserAsync(id, user);
             return Ok(new ApiOkResponse(result));
         }
+        [HttpPut("update-user-active")]
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> UpdateActiveUser([FromBody] UpdateUserActiveRequest request)
+        {
+            await _serviceManager.UserService.UpdateUserActiveAsync(request);
+            return Ok(new ApiOkResponse());
+        }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Artist")]
         public async Task<IActionResult> DeleteUser(int id)

@@ -11,5 +11,6 @@ namespace Contracts.Services
         Task<UserResponse> UpdateUserAsync(int userId, UserToUpdateDTO userModel);
         Task DeleteUserAsync(int id);
         Task AddRoleToUser(int roleId, int userId);
+        Task UpdateUserActiveAsync(UpdateUserActiveRequest request);
     }
 }
