@@ -18,11 +18,6 @@ namespace Repository
             
         }
 
-        public void CreateRole(Role entity)
-        {
-            Create(entity);
-        }
-
         public async Task<IEnumerable<Role>> GetAllRolesAsync(bool trackChanges = false)
         {
             return await FindAll(trackChanges)
