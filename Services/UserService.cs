@@ -23,12 +23,14 @@ namespace Services
             var user = await _repositoryManager.Users.GetUserByIdAsync(userId) ?? throw new UserNotFoundException();
             var role = await _repositoryManager.Roles.GetRoleByIdAsync(roleId) ?? throw new UserNotFoundException();
             user.Role = role;
+            _repositoryManager.Users.UpdateUser(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteUserAsync(int id)
         {
             var user = await _repositoryManager.Users.GetUserByIdAsync(id) ?? throw new UserNotFoundException();
+            if(user.Role.Name == RoleEnum.Administrador.ToString()) throw new UserNotFoundException();
             _repositoryManager.Users.DeleteUser(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
@@ -66,6 +68,7 @@ namespace Services
         public async Task UpdateUserActiveAsync(UpdateUserActiveRequest request)
         {
             var user = await _repositoryManager.Users.GetUserByIdAsync(request.Id) ?? throw new UserNotFoundException();
+            if (user.Role.Name == RoleEnum.Administrador.ToString()) throw new UserNotFoundException();
             user.Activo = request.Active;
             _repositoryManager.Users.UpdateUser(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();

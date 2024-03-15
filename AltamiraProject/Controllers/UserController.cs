@@ -29,7 +29,7 @@ namespace AltamiraProject.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador,Artist")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserToUpdateDTO user)
+        public async Task<IActionResult> UpdateUser([FromRoute]int id, [FromBody] UserToUpdateDTO user)
         {
             var result = await _serviceManager.UserService.UpdateUserAsync(id, user);
             return Ok(new ApiOkResponse(result));
@@ -42,15 +42,15 @@ namespace AltamiraProject.Controllers
             return Ok(new ApiOkResponse());
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Artist")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _serviceManager.UserService.DeleteUserAsync(id);
             return Ok(new ApiOkResponse());
         }
-        [HttpPost("{id}/addrole")]
+        [HttpPost("{id}/addrole/{roleId}")]
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> AddRoleToUser(int id,int roleId)
+        public async Task<IActionResult> AddRoleToUser([FromRoute]int id,[FromRoute]int roleId)
         {
             await _serviceManager.UserService.AddRoleToUser(roleId, id);
             return Ok(new ApiOkResponse());
