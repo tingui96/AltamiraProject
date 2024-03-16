@@ -52,6 +52,7 @@ namespace Services
         public async Task<UserResponse> UpdateUserAsync(int userId, UserToUpdateDTO userModel)
         {
             var user = await _repositoryManager.Users.GetUserByIdAsync(userId) ?? throw new UserNotFoundException();
+            _repositoryManager.Images.Delete(user.PhotoUrl);
             var userToUpdate = userModel.Adapt(user);
             _repositoryManager.Users.UpdateUser(userToUpdate);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
@@ -70,6 +71,15 @@ namespace Services
             var user = await _repositoryManager.Users.GetUserByIdAsync(request.Id) ?? throw new UserNotFoundException();
             if (user.Role.Name == RoleEnum.Administrador.ToString()) throw new UserNotFoundException();
             user.Activo = request.Active;
+            _repositoryManager.Users.UpdateUser(user);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync();
+        }
+        public async Task UpdateUserPhotoAsync(UpdateUserPhoto request)
+        {
+            var user = await _repositoryManager.Users.GetUserByIdAsync(request.Id) ?? throw new UserNotFoundException();
+            var result =_repositoryManager.Images.Delete(user.PhotoUrl);
+            if (!result) throw new Exception("error en el delete");
+            user.PhotoUrl = request.PhotoUrl;
             _repositoryManager.Users.UpdateUser(user);
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }

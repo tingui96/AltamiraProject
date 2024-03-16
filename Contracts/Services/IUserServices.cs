@@ -12,5 +12,6 @@ namespace Contracts.Services
         Task DeleteUserAsync(int id);
         Task AddRoleToUser(int roleId, int userId);
         Task UpdateUserActiveAsync(UpdateUserActiveRequest request);
+        Task UpdateUserPhotoAsync(UpdateUserPhoto request);
     }
 }

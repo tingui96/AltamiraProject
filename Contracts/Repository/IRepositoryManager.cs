@@ -8,6 +8,7 @@ namespace Contracts.Repository
         IObraRepository Obras { get; }
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
+        IImageRepository Images { get; }
         IUnitOfWork UnitOfWork { get; }
 
     }
