@@ -3,6 +3,7 @@ using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using NLog;
 
@@ -18,6 +19,10 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureDatabase(builder.Configuration);
 builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.ConfigureValidation();
 builder.Services.AddControllers();
 builder.Services.Configure<FormOptions>(o =>

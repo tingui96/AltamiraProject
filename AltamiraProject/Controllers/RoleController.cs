@@ -20,14 +20,14 @@ namespace AltamiraProject.Controllers
             var roles = await _serviceManager.RoleService.GetAllRoleAsync();
             return Ok(new ApiOkResponse(roles));
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetRoleById")]
         public async Task<IActionResult> GetRoleById(int id)
         {
             var role = await _serviceManager.RoleService.GetRoleByIdAsync(id);
             return Ok(new ApiOkResponse(role));
         }
-        [HttpGet("name/{name}")]
-        public async Task<IActionResult> GetRoleById(string name)
+        [HttpGet("name/{name}", Name = "GetRoleByName")]
+        public async Task<IActionResult> GetRoleByName(string name)
         {
             var role = await _serviceManager.RoleService.GetRoleByNameAsync(name);
             return Ok(new ApiOkResponse(role));

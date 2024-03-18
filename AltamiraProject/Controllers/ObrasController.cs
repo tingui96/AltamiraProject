@@ -4,6 +4,7 @@ using Contracts.Services;
 using Entities.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 
 namespace AltamiraProject.Controllers
 {
@@ -25,7 +26,7 @@ namespace AltamiraProject.Controllers
             var obras = await _serviceManager.ObraService.GetAllObrasAsync();
             return Ok(new ApiOkResponse(obras));
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name = "GetObraById")]
         public async Task<IActionResult> GetObraById(int id)
         {
             var obra = await _serviceManager.ObraService.GetObrabyIdAsync(id);
@@ -36,7 +37,7 @@ namespace AltamiraProject.Controllers
         public async Task<IActionResult> CreateObra(ObraModel obraModel)
         {
             var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
-            return Ok(new ApiOkResponse(obra));
+            return CreatedAtRoute("GetObraById", new { obra.Id }, obra);
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Artist")]
