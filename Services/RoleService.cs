@@ -3,13 +3,7 @@ using Contracts.Repository;
 using Contracts.Services;
 using Entities.DTO.Response;
 using Entities.Exceptions.NotFound;
-using Entities.Models;
 using Mapster;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {

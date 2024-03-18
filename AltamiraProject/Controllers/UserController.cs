@@ -1,4 +1,5 @@
 ﻿using AltamiraProject.ApiResponse;
+using AltamiraProject.Validation;
 using Contracts.Services;
 using Entities.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,7 @@ namespace AltamiraProject.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador,Artist")]
+        [ServiceFilter(typeof(UserAuthorizationFilters))]
         public async Task<IActionResult> UpdateUser([FromRoute]int id, [FromBody] UserToUpdateDTO user)
         {
             var result = await _serviceManager.UserService.UpdateUserAsync(id, user);

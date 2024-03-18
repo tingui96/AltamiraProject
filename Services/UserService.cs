@@ -5,11 +5,7 @@ using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Enum;
 using Entities.Exceptions.NotFound;
-using Entities.Models;
 using Mapster;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 
 namespace Services
 {

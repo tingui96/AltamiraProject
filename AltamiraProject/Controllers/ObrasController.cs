@@ -1,10 +1,10 @@
 ﻿using AltamiraProject.ApiResponse;
+using AltamiraProject.Validation;
 using Contracts;
 using Contracts.Services;
 using Entities.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.Design;
 
 namespace AltamiraProject.Controllers
 {
@@ -33,21 +33,23 @@ namespace AltamiraProject.Controllers
             return Ok(new ApiOkResponse(obra));
         }
         [HttpPost]
-        [Authorize(Roles = "Artist")]
+        [Authorize(Roles = "Administrador,Artist")]
         public async Task<IActionResult> CreateObra(ObraModel obraModel)
         {
             var obra = await _serviceManager.ObraService.CreateObraAsync(obraModel);
             return CreatedAtRoute("GetObraById", new { obra.Id }, obra);
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "Artist")]
+        [Authorize(Roles = "Administrador,Artist")]
+        [ServiceFilter(typeof(ObraAuthorizationFilter))]
         public async Task<IActionResult> UpdateObra(int id, ObraToUpdateDTO obraToUpdate)
         {
             var result = await _serviceManager.ObraService.UpdateObraAsync(id, obraToUpdate);
             return Ok(new ApiOkResponse(result));
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Artist")]
+        [Authorize(Roles = "Administrador,Artist")]
+        [ServiceFilter(typeof(ObraAuthorizationFilter))]
         public async Task<IActionResult> DeleteObra(int id)
         {
             await _serviceManager.ObraService.DeleteObraAsync(id);

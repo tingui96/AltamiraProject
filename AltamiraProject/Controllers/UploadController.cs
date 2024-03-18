@@ -1,8 +1,6 @@
 ﻿using AltamiraProject.ApiResponse;
 using Contracts.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 
 namespace AltamiraProject.Controllers
 {

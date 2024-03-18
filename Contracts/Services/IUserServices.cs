@@ -1,6 +1,5 @@
 ﻿using Entities.DTO.Request;
 using Entities.DTO.Response;
-using Microsoft.AspNetCore.Identity;
 
 namespace Contracts.Services
 {

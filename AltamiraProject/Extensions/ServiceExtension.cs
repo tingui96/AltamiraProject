@@ -94,6 +94,8 @@ namespace AltamiraProject.Extensions
         public static void ConfigureValidation(this IServiceCollection services)
         {
             services.AddScoped<ModelValidationAttribute>();
+            services.AddScoped<UserAuthorizationFilters>();
+            services.AddScoped<ObraAuthorizationFilter>();
         }
     }
 

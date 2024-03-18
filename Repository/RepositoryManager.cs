@@ -1,7 +1,5 @@
 ﻿using Contracts.Repository;
 using Entities;
-using Entities.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Repository
 {

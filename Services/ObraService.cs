@@ -6,7 +6,6 @@ using Entities.DTO.Response;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Mapster;
-using System.ComponentModel.Design;
 
 namespace Services
 {
