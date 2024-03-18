@@ -3,12 +3,7 @@ using Entities;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -29,9 +24,9 @@ namespace Repository
             Delete(entity);
         }
 
-        public IQueryable<User> GetAllUsers(Expression<Func<User,bool>> expresion, bool trackChanges = false)
+        public async Task<IEnumerable<User>> GetAllUsersWhere(Expression<Func<User,bool>> expresion, bool trackChanges = false)
         {
-            return FindByCondition(expresion, trackChanges);
+            return await FindByCondition(expresion, trackChanges).ToListAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges = false)

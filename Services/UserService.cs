@@ -5,7 +5,9 @@ using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Enum;
 using Entities.Exceptions.NotFound;
+using Entities.RequestFeatures;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -54,11 +56,13 @@ namespace Services
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<UserResponse>> GetAllUserAsync()
+        public async Task<PagedList<UserResponse>> GetAllUserAsync(UserParameters userParameters)
         {
-            var users = await _repositoryManager.Users.GetAllUsersAsync();
+            var users = (await _repositoryManager.Users.GetAllUsersAsync())
+                .OrderBy(x => x.UserName)
+                .Skip((userParameters.PageNumber - 1) * userParameters.PageSize);
             var result = users.Adapt<IEnumerable<UserResponse>>();
-            return await Task.FromResult(result);
+            return await Task.FromResult(PagedList<UserResponse>.ToPagedList(result,userParameters.PageNumber,userParameters.PageSize));
         }
 
         public async Task<UserResponse> GetUserByIdAsync(int userId)
@@ -88,12 +92,12 @@ namespace Services
             var result = userToUpdate.Adapt<UserResponse>();
             return await Task.FromResult(result);
         }
-        public async Task<IEnumerable<UserResponse>> GetAllArtistAsync()
+        public async Task<PagedList<UserResponse>> GetAllArtistAsync(UserParameters userParameters)
         {
             var role = await _repositoryManager.Roles.GetRoleByNameAsync(RoleEnum.Artist.ToString());
             var artists = role.Users;
             var result = artists.Adapt<IEnumerable<UserResponse>>();
-            return await Task.FromResult(result);
+            return PagedList<UserResponse>.ToPagedList(result, userParameters.PageNumber, userParameters.PageSize);
         }
         public async Task UpdateUserActiveAsync(UpdateUserActiveRequest request)
         {

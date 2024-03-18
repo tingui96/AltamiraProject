@@ -5,6 +5,7 @@ using Entities.DTO.Request;
 using Entities.DTO.Response;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Mapster;
 
 namespace Services
@@ -40,11 +41,11 @@ namespace Services
             await _repositoryManager.UnitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ObraResponse>> GetAllObrasAsync()
+        public async Task<PagedList<ObraResponse>> GetAllObrasAsync(ObraParameters obraParameters)
         {
             var obras = await _repositoryManager.Obras.GetAllObrasAsync();
             var result = obras.Adapt<IEnumerable<ObraResponse>>();
-            return await Task.FromResult(result);
+            return await Task.FromResult(PagedList<ObraResponse>.ToPagedList(result, obraParameters.PageNumber, obraParameters.PageSize));
         }
 
         public async Task<ObraResponse> GetObrabyIdAsync(int obraId)
@@ -57,6 +58,19 @@ namespace Services
             }
             var result = obra.Adapt<ObraResponse>();
             return await Task.FromResult(result);
+        }
+
+        public async Task<PagedList<ObraResponse>> GetObrasByArtistAsync(int userId, ObraParameters obraParameters)
+        {
+            var user = await _repositoryManager.Users.GetUserByIdAsync(userId);
+            if(user == null)
+            {
+                _loggerManager.LogInfo($"Artist with id: {userId} doesn't exist in the database.");
+                throw new UserNotFoundException();
+            }
+            var obras = _repositoryManager.Obras.GetObrasByArtistAsync(userId);
+            var result = obras.Adapt<IEnumerable<ObraResponse>>();
+            return await Task.FromResult(PagedList<ObraResponse>.ToPagedList(result, obraParameters.PageNumber, obraParameters.PageSize));
         }
 
         public async Task<ObraResponse> UpdateObraAsync(int obraId, ObraToUpdateDTO model)

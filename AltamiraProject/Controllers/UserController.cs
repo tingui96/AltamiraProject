@@ -2,8 +2,10 @@
 using AltamiraProject.Validation;
 using Contracts.Services;
 using Entities.DTO.Request;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AltamiraProject.Controllers
 {
@@ -17,9 +19,10 @@ namespace AltamiraProject.Controllers
             _serviceManager = repositoryService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllUser()
+        public async Task<IActionResult> GetAllUser([FromQuery]UserParameters userParameters)
         {
-            var users = await _serviceManager.UserService.GetAllUserAsync();
+            var users = await _serviceManager.UserService.GetAllUserAsync(userParameters);
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(users.MetaData));
             return Ok(new ApiOkResponse(users));
         }
         [HttpGet("{id}")]
@@ -27,6 +30,14 @@ namespace AltamiraProject.Controllers
         {
             var user = await _serviceManager.UserService.GetUserByIdAsync(id);
             return Ok(new ApiOkResponse(user));
+        }
+        [AllowAnonymous]
+        [HttpGet("{id}/obras", Name = "obrasByArtist")]
+        public async Task<IActionResult> GetAllObrasByArtist(int id, [FromQuery] ObraParameters obraParameters)
+        {
+            var obras = await _serviceManager.ObraService.GetObrasByArtistAsync(id, obraParameters);
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(obras.MetaData));
+            return Ok(new ApiOkResponse(obras));
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrador,Artist")]

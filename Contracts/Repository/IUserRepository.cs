@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Contracts.Repository
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges = false);
-        IQueryable<User> GetAllUsers(Expression<Func<User, bool>> expresion, bool trackChanges = false);
+        Task<IEnumerable<User>> GetAllUsersWhere(Expression<Func<User, bool>> expresion, bool trackChanges = false);
         Task<User> GetUserByIdAsync(int userId, bool trackChanges = false);
         Task<User> GetUserByUserNameAsync(string userName, bool trackChanges = false);
         void CreateUser(User entity);

@@ -3,8 +3,10 @@ using AltamiraProject.Validation;
 using Contracts;
 using Contracts.Services;
 using Entities.DTO.Request;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AltamiraProject.Controllers
 {
@@ -21,11 +23,13 @@ namespace AltamiraProject.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllObras() 
+        public async Task<IActionResult> GetAllObras([FromQuery] ObraParameters obraParameters) 
         {
-            var obras = await _serviceManager.ObraService.GetAllObrasAsync();
+            var obras = await _serviceManager.ObraService.GetAllObrasAsync(obraParameters);
+            Response.Headers.Append("X-Pagination",JsonConvert.SerializeObject(obras.MetaData));
             return Ok(new ApiOkResponse(obras));
         }
+        
         [HttpGet("{id}",Name = "GetObraById")]
         public async Task<IActionResult> GetObraById(int id)
         {

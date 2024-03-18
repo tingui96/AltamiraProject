@@ -1,7 +1,9 @@
 ﻿using Contracts.Repository;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace Repository
 {
@@ -28,14 +30,19 @@ namespace Repository
                 .OrderBy(O => O.Titulo)
                 .ToListAsync();
         }
-        public async Task<Obra> GetObraByIdAsync(int obraId,bool trackChanges)
+        public async Task<Obra> GetObraByIdAsync(int obraId, bool trackChanges)
         {
             var obra = await FindByCondition(obra =>
                 obra.Id.Equals(obraId), trackChanges)
                 .FirstOrDefaultAsync() ?? throw new Exception("Obra not found");
             return await Task.FromResult(obra);
         }
-       
-      
+
+        public async Task<IEnumerable<Obra>> GetObrasByArtistAsync(int userId,
+            bool trackChanges) =>
+             await FindByCondition(e => e.UserId.Equals(userId), trackChanges)
+                .OrderBy(e => e.Titulo)
+                .ToListAsync();
+
     }
 }

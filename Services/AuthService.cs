@@ -9,10 +9,8 @@ using Entities.Exceptions.BadRequest;
 using Entities.Exceptions.NotFound;
 using Entities.Models;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -52,8 +50,8 @@ namespace Services
         public async Task RegisterAsync(RegisterModel model)
         {
             var user = model.Adapt<User>();
-            var findUserName = await _repositoryManager.Users.GetAllUsers(x => x.UserName.Equals(model.UserName) || x.Email.Equals(model.Email))
-                .FirstOrDefaultAsync();
+            var findUserName = (await _repositoryManager.Users.GetAllUsersWhere(x => x.UserName.Equals(model.UserName) || x.Email.Equals(model.Email)))
+                .FirstOrDefault();
             if(findUserName is not null && findUserName.UserName.ToLower() == model.UserName.ToLower()) throw new UserExistBadRequestException();
             if (findUserName is not null && findUserName.Email == model.UserName) throw new EmailExistBadRequestException();
             if (!VerifyEmail(model.Email)) throw new EmailExpectedBadRequestException();
