@@ -1,4 +1,5 @@
-﻿using Contracts.Repository;
+﻿using Contracts;
+using Contracts.Repository;
 using Contracts.Services;
 using CryptoHelper;
 using Entities.DTO;
@@ -22,18 +23,19 @@ namespace Services
     public class AuthService : IAuthService
     {
         private readonly IRepositoryManager _repositoryManager;
+        private readonly ILoggerManager _loggerManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IRepositoryManager repositoryManager, IConfiguration configuration)
+        public AuthService(IRepositoryManager repositoryManager,ILoggerManager loggerManager, IConfiguration configuration)
         {
             _repositoryManager = repositoryManager;
+            _loggerManager = loggerManager;
             _configuration = configuration;
         }  
 
         public async Task<AuthResponse> LoginAsync(LoginModel model)
         {
             var userToVerify = await UserExists(model.Usuario);
-            if (!userToVerify.Activo) throw new UserNotFoundException();
             var check = VerifyPassword(userToVerify.Password, model.Password);
             if (check)
             {
@@ -94,7 +96,11 @@ namespace Services
         private async Task<User> UserExists(string Username)
         {
             var user = await _repositoryManager.Users.GetUserByUserNameAsync(Username) ?? throw new UserNotFoundException();
-            if(!user.Activo) throw new UserNotFoundException();
+            if (!user.Activo)
+            {
+                _loggerManager.LogInfo($"User inactive with id:{user.Id}");
+                throw new UserNotFoundException();
+            } 
             return await Task.FromResult(user);
         }
         private List<Claim> GetClaims(User user,Role role)

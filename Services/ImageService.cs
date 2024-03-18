@@ -1,4 +1,5 @@
-﻿using Contracts.Repository;
+﻿using Contracts;
+using Contracts.Repository;
 using Contracts.Services;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -13,9 +14,11 @@ namespace Services
     public class ImageService : IImageService
     {
         private readonly IRepositoryManager _repositoryManager;
-        public ImageService(IRepositoryManager repositoryManager)
+        private readonly ILoggerManager _loggerManager;
+        public ImageService(IRepositoryManager repositoryManager, ILoggerManager loggerManager)
         {
             _repositoryManager = repositoryManager;
+            _loggerManager = loggerManager;
         }
         public Task<string> GetImageAsync(string url)
         {

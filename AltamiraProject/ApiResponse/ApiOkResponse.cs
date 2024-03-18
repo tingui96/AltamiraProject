@@ -7,9 +7,9 @@
         {
             this.result = result;
         }
-        public ApiOkResponse() : base(200)
+        public ApiOkResponse() : base(204)
         {
-            this.result = "Ok";
+            this.result = "No Content";
         }
     }
 }
