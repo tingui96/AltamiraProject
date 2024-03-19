@@ -25,9 +25,10 @@ namespace AltamiraProject.Extensions
             {
                 option.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("X-Pagination");
                 });
             });
         }
